@@ -1,10 +1,11 @@
 import Sequelize from 'sequelize';
-import settings from './settings';
+import settings from '../config/settings';
 
 const { db } = settings;
 
-const sequelize = new Sequelize(db.name, db.account, db.password, {
-  host: 'localhost',
+const sequelize = new Sequelize(db.name, db.username, db.password, {
+  host: db.host,
+  port: db.port,
   dialect: 'mysql',
   operatorsAliases: false,
   dialectOptions: {
@@ -21,7 +22,12 @@ const sequelize = new Sequelize(db.name, db.account, db.password, {
     idle: 10000,
   },
   timezone: '+08:00', // 东八时区
-})
+});
+
+// 创建模型
+sequelize.sync({
+  force: false
+});
 
 // 测试连接
 sequelize
@@ -34,4 +40,3 @@ sequelize
   });
 
 export default sequelize;
-

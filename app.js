@@ -5,7 +5,7 @@ import bodyparser from 'koa-bodyparser';
 import logger from 'koa-logger';
 import koaJwt from 'koa-jwt';
 import settings from './config/settings';
-import { initLogPath } from './utils/log_util';
+import { initLogPath } from './core/logger';
 
 import responseFormatter from './middlewares/response_formatter';
 import jwtErrorHandler from './middlewares/jwt_error_handler';
@@ -18,9 +18,6 @@ import blog from './routes/blog';
 
 const app = new Koa();
 const { jwt, port } = settings;
-
-// 初始化 log 文件夹
-initLogPath();
 
 // error handler
 onerror(app);
@@ -37,6 +34,7 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(logger());
   app.use(loggerDevelopment);
 } else {
+  initLogPath();
   app.use(loggerProduction);
 }
 

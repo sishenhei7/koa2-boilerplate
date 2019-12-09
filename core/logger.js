@@ -1,6 +1,6 @@
 import fs from 'fs';
 import log4js from 'log4js';
-import logConfig from '../config/log_config';
+import logConfig from '../config/logger';
 
 // 加载配置文件
 log4js.configure(logConfig);

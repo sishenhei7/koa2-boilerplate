@@ -11,8 +11,14 @@ apiErrorNames.USER_NOT_EXIST = 'userNotExist';
  */
 const errorMap = new Map();
 
-errorMap.set(apiErrorNames.UNKNOW_ERROR, { code: -1, message: '未知错误' });
-errorMap.set(apiErrorNames.USER_NOT_EXIST, { code: 101, message: '用户不存在' });
+errorMap.set(apiErrorNames.UNKNOW_ERROR, {
+  code: -1,
+  message: '未知错误'
+});
+errorMap.set(apiErrorNames.USER_NOT_EXIST, {
+  code: 101,
+  message: '用户不存在'
+});
 
 // 根据错误名称获取错误信息
 apiErrorNames.getErrorInfo = (errorName) => {

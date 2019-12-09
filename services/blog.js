@@ -1,14 +1,10 @@
-import sequelize from '../config/db';
+import BlogModel from '../models/blog';
 
-const Blog = sequelize.import('../schema/blog.js');
-
-Blog.sync({ force: false });
-
-class BlogModel {
+class BlogService {
   async getAllBlog(query) {
     // 通过使用sequelize 的findAll 来查询数据
     // 根据query参数实现查询关键词功能
-    const blogs = await Blog.findAll({
+    const blogs = await BlogModel.findAll({
       where: {
         ...query,
       },
@@ -20,4 +16,4 @@ class BlogModel {
   }
 }
 
-export default new BlogModel;
+export default new BlogService();

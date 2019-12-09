@@ -1,4 +1,4 @@
-import apiErrorNames from './apiErrorNames';
+import errorNames from '../utils/error_names';
 
 /**
  * 自定义Api异常
@@ -8,7 +8,7 @@ class ApiError extends Error {
   constructor(errorName) {
     super();
 
-    const errorInfo = apiErrorNames.getErrorInfo(errorName);
+    const errorInfo = errorNames.getErrorInfo(errorName);
 
     this.name = errorName;
     this.code = errorInfo.code;

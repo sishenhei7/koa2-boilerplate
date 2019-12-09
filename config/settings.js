@@ -2,7 +2,9 @@ export default {
   port: 3000,
   db: {
     name: 'koa',
-    account: 'root',
+    host: 'localhost',
+    port: 3306,
+    username: 'root',
     password: '12345678q',
   },
   jwt: {
