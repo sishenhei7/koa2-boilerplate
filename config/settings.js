@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   port: 3000,
   db: {
     name: 'koa',

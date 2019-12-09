@@ -1,5 +1,7 @@
-const Sequelize = require('sequelize');
-const { db } = require('./settings');
+import Sequelize from 'sequelize';
+import settings from './settings';
+
+const { db } = settings;
 
 const sequelize = new Sequelize(db.name, db.account, db.password, {
   host: 'localhost',
@@ -31,6 +33,5 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-module.exports = {
-  sequelize,
-}
+export default sequelize;
+

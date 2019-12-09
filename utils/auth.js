@@ -1,12 +1,7 @@
-const jwt = require('jsonwebtoken');
-const {
-  jwt: {
-    tokenName,
-    secret,
-    expiresIn,
-  },
-} = require('../config/settings');
+import jwt from 'jsonwebtoken';
+import settings from '../config/settings';
 
+const { jwt: { tokenName, secret, expiresIn } } = settings;
 const AUTHORIZATION = 'Authorization';
 
 const auth = {
@@ -31,4 +26,4 @@ const auth = {
   },
 }
 
-module.exports = auth;
+export default auth;

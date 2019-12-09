@@ -1,9 +1,11 @@
-const router = require('koa-router')() // 使用koa-router 来指定接口路由
-const BlogControll = require('../controllers/blog') // 引入Control部分
+import Router from 'koa-router';
+import BlogControll from '../controllers/blog';
 
-router.prefix('/api/blog')
+const router = new Router();
 
-// 使用router.get 提供get请求
-router.get('/', BlogControll.getAllBlog)
+router.prefix('/api/blog');
 
-module.exports = router
+// 提供路由
+router.get('/', BlogControll.getAllBlog);
+
+export default router;

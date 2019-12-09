@@ -33,5 +33,6 @@ const blog = (sequelize, DataTypes) => sequelize.define('blog', {
      * 如果指定的表名称本身就是复数，则形式不变
      */
   freezeTableName: false,
-})
-module.exports = blog
+});
+
+export default blog;

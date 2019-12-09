@@ -1,4 +1,4 @@
-import ApiError from '../error/ApiError';
+import ApiError from '../error/apiError';
 
 /**
  * 在app.use(router)之前调用

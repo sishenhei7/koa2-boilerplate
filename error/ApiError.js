@@ -1,4 +1,4 @@
-const ApiErrorNames = require('./ApiErrorNames');
+import apiErrorNames from './apiErrorNames';
 
 /**
  * 自定义Api异常
@@ -8,7 +8,7 @@ class ApiError extends Error {
   constructor(errorName) {
     super();
 
-    const errorInfo = ApiErrorNames.getErrorInfo(errorName);
+    const errorInfo = apiErrorNames.getErrorInfo(errorName);
 
     this.name = errorName;
     this.code = errorInfo.code;
@@ -16,4 +16,4 @@ class ApiError extends Error {
   }
 }
 
-module.exports = ApiError;
+export default ApiError;
