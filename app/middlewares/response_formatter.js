@@ -33,6 +33,7 @@ const urlFilter = (pattern) => async (ctx, next) => {
         code: error.code,
         message: error.message,
       }
+      // return ctx.body;
     }
 
     // 继续抛，让外层中间件处理日志

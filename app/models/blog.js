@@ -3,9 +3,9 @@ import Sequelize from 'sequelize';
 
 const { Model } = Sequelize;
 
-class BlogModel extends Model {}
+class Blog extends Model {}
 
-BlogModel.init({
+Blog.init({
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -38,4 +38,4 @@ BlogModel.init({
   freezeTableName: false,
 });
 
-export default BlogModel;
+export default Blog;
