@@ -7,11 +7,9 @@ const sequelize = new Sequelize(db.name, db.username, db.password, {
   host: db.host,
   port: db.port,
   dialect: 'mysql',
-  operatorsAliases: false,
   dialectOptions: {
     // 字符集
     charset: 'utf8mb4',
-    collate: 'utf8mb4_unicode_ci',
     supportBigNumbers: true,
     bigNumberStrings: true,
   },
