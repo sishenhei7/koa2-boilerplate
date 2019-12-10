@@ -19,31 +19,34 @@ const responseFormatter = (ctx) => {
   }
 }
 
-const urlFilter = (pattern) => async (ctx, next) => {
-  const reg = new RegExp(pattern);
+const errorFormatter = (ctx, err) => {
+  ctx.status = 200;
+  ctx.body = {
+    code: err.code,
+    message: err.message,
+  }
+  return ctx.body;
+}
 
+const urlFilter = () => async (ctx, next) => {
   try {
     // 先去执行路由
     await next();
+
+    // 处理 404
+    if (!ctx.body && (!ctx.status || ctx.status === 404)) {
+      return errorFormatter(ctx, new ApiError('NOT_FOUND'));
+    }
   } catch (error) {
-    // 如果异常类型是API异常并且通过正则验证的url，将错误信息添加到响应体中返回。
-    if (error instanceof ApiError && reg.test(ctx.originalUrl)) {
-      ctx.status = 200;
-      ctx.body = {
-        code: error.code,
-        message: error.message,
-      }
-      // return ctx.body;
+    // 处理抛出的 ApiError 错误
+    if (error instanceof ApiError) {
+      return errorFormatter(ctx, error);
     }
 
-    // 继续抛，让外层中间件处理日志
-    throw error;
+    return errorFormatter(ctx, new ApiError('INTERNAL_SERVER_ERROR'));
   }
 
-  // 通过正则的url进行格式化处理
-  if (reg.test(ctx.originalUrl)) {
-    responseFormatter(ctx);
-  }
+  responseFormatter(ctx);
 }
 
 export default urlFilter;
