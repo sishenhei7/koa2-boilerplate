@@ -6,7 +6,7 @@ class UserControl {
     const { body } = ctx.request;
     await UserService.register(body);
     // ctx.body = data;
-    // throw new ApiError(USER_NOT_EXIST);
+    // throw new ApiError('USER_NOT_EXIST');
   }
 }
 
