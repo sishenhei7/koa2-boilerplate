@@ -12,5 +12,8 @@ export default async (ctx, next) => {
   } catch (err) {
     ms = new Date() - start;
     logUtil.logError(ctx, err, ms);
+
+    // 继续抛错误
+    throw(err);
   }
 }

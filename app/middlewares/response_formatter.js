@@ -7,7 +7,6 @@ import { isDef } from '../utils/util';
 const responseFormatter = (ctx) => {
   // 如果有返回数据，将返回数据添加到data中
   if (isDef(ctx.body)) {
-    console.log('ctx.body', typeof ctx.body);
     ctx.body = {
       code: 0,
       message: 'success',

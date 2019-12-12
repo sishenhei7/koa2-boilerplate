@@ -1,5 +1,4 @@
 import Koa from 'koa';
-import onerror from 'koa-onerror';
 import bodyparser from 'koa-bodyparser';
 import logger from 'koa-logger';
 import cors from '@koa/cors';
@@ -15,7 +14,6 @@ import loggerProduction from './middlewares/logger_production';
 const app = new Koa();
 
 // error handler
-onerror(app);
 app.use(responseFormatter('^/api'));
 
 // bodyparser

@@ -32,7 +32,8 @@ export default {
 
     const user = await User.findOne({
       where: {
-        ...query,
+        username,
+        password,
       },
     });
 

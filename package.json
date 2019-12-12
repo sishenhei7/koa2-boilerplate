@@ -19,10 +19,8 @@
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "koa-convert": "^1.2.0",
-    "koa-json": "^2.0.2",
     "koa-jwt": "^3.6.0",
     "koa-logger": "^3.2.0",
-    "koa-onerror": "^4.1.0",
     "log4js": "^6.1.0",
     "mysql2": "^2.0.1",
     "sequelize": "^5.21.2"
