@@ -15,7 +15,7 @@ export default {
       }
     });
 
-    if (hasUser) throw new ApiError('USER_IS_EXISTED');
+    if (hasUser) throw new ApiError('用户已存在');
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const userInfo = await User.create({
@@ -28,20 +28,19 @@ export default {
   async login(ctx) {
     const { username, password } = ctx.request.body;
 
-    if (!username || !password) throw (new ApiError('用户不存在！'));
+    if (!username || !password) throw (new ApiError('INVALID_ARGUMENT'));
 
     const user = await User.findOne({
       where: {
         username,
-        password,
       },
     });
 
-    if (!user) throw (new ApiError('用户不存在！'));
+    if (!user) throw (new ApiError('用户不存在'));
 
     const isUserValid = bcrypt.compare(password, user.password);
 
-    if (!isUserValid) throw (new ApiError('用户密码错误！'));
+    if (!isUserValid) throw (new ApiError('用户密码错误'));
 
     const token = auth.sign({ username, password });
     ctx.body = token;
@@ -54,11 +53,11 @@ export default {
       const userInfo = auth.verify(token);
       const isUserValid = userInfo && bcrypt.compare(password, userInfo.password);
 
-      if (!isUserValid) throw (new ApiError('认证失败！'));
+      if (!isUserValid) throw (new ApiError('认证失败'));
 
       ctx.body = '认证成功';
     } catch (error) {
-      throw (new ApiError('认证失败！'));
+      throw (new ApiError('认证失败'));
     }
   },
 };
