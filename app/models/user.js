@@ -30,6 +30,7 @@ User.init({
   },
 }, {
   sequelize,
+  modelName: 'user',
   freezeTableName: false,
 });
 

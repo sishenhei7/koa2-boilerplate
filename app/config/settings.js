@@ -8,12 +8,13 @@ export default {
     password: '12345678q',
   },
   jwt: {
-    tokenName: 'tokenName',
     secret: 'secret',
-    expiresIn: '24h', // 默认单位：秒
+    expiresIn: '1d', // 默认单位：秒
     ignoredPath: [
-      /^\/api\/user\/login/,
-      /^\/api\/user\/register/,
+      /^\/api\/(?!(user))/,
+      // /^\/api\/login/,
+      // /^\/api\/register/,
+      // /^\/api\/blog/,
     ],
   },
 };

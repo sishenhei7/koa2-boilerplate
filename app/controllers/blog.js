@@ -1,13 +1,41 @@
-import BlogService from '../services/blog';
-// import ApiError from '../core/error';
+import Sequelize from 'sequelize';
+import Blog from '../models/blog';
 
-class BlogControl {
+const Op = Sequelize.Op;
+
+export default {
   async getAllBlog(ctx) {
-    const { query } = ctx.request; // 获取前端传来的参数
-    const data = await BlogService.getAllBlog(query); // 获取查询的数据
-    ctx.body = data;
-    // throw new ApiError('USER_NOT_EXIST');
-  }
-}
+    const { search } = ctx.request.query;
+    let data = null;
 
-export default new BlogControl();
+    if (search) {
+      data = await Blog.findAll({
+        where: {
+          [Op.or]: [
+            {
+              title: {
+                [Op.like]: `%${search}%`,
+              }
+            },
+            {
+              author: {
+                [Op.like]: `%${search}%`,
+              }
+            }
+          ],
+        },
+        order: [
+          ['id'],
+        ],
+      });
+    } else {
+      data = await Blog.findAll({
+        order: [
+          ['id'],
+        ],
+      });
+    }
+
+    return ctx.body = data;
+  },
+};

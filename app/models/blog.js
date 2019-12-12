@@ -35,6 +35,7 @@ Blog.init({
   },
 }, {
   sequelize,
+  modelName: 'blog',
   freezeTableName: false,
 });
 

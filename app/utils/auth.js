@@ -1,24 +1,18 @@
 import jwt from 'jsonwebtoken';
 import settings from '../config/settings';
 
-const { jwt: { tokenName, secret, expiresIn } } = settings;
-const AUTHORIZATION = 'Authorization';
+const { jwt: { secret, expiresIn } } = settings;
 
 const auth = {
-  sign: (ctx, info) => {
-    const token = jwt.sign(info || { name: 'name' }, secret, { expiresIn });
-    ctx.set(AUTHORIZATION, `Bearer ${token}`);
-    ctx.cookies.set(tokenName, token, {
-      maxAge: expiresIn,
-      httpOnly: true,
-    });
+  sign: (info) => {
+    const token = jwt.sign(info, secret, { expiresIn });
     return token;
   },
 
   verify: (token) => {
     let ret = true;
     try {
-      jwt.verify(token, secret);
+      ret = jwt.verify(token, secret);
     } catch (err) {
       ret = false;
     }

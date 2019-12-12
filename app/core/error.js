@@ -38,6 +38,10 @@ const errorMap = {
     code: 404,
     message: '请求失败，未发现资源'
   },
+  METHOD_NOT_ALLOWED: {
+    code: 405,
+    message: '请求失败，请求方法不正确'
+  },
   NOT_ACCEPTABLE: {
     code: 406,
     message: '请求条件无法满足'

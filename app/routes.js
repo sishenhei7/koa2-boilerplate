@@ -6,8 +6,10 @@ import BlogControll from './controllers/blog';
 const router = new Router();
 
 router.prefix('/api');
-router.get('/login', AuthControll.login);
-router.post('/user/register', UserControll.register);
-router.get('/blog/', BlogControll.getAllBlog);
+router.post('/login', AuthControll.login);
+router.get('/verify', AuthControll.verify);
+router.post('/register', AuthControll.register);
+router.get('/user', UserControll.getAllUsers);
+router.get('/blog', BlogControll.getAllBlog);
 
 export default router;

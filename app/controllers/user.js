@@ -1,13 +1,17 @@
-import UserService from '../services/user';
-// import ApiError from '../core/error';
+import User from '../models/user';
 
-class UserControl {
-  async register(ctx) {
-    const { body } = ctx.request;
-    await UserService.register(body);
-    // ctx.body = data;
-    // throw new ApiError('USER_NOT_EXIST');
-  }
-}
+export default {
+  async getAllUsers(ctx) {
+    const users = await User.findAll({
+      attributes: {
+        exclude: ['password'],
+      },
+      order: [
+        ['id'],
+      ],
+    });
 
-export default new UserControl();
+    ctx.body = users;
+  },
+};
+
