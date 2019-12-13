@@ -17,6 +17,16 @@ Blog.init({
     allowNull: false,
     field: 'title',
   },
+  tags: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    field: 'tags',
+  },
+  summary: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    field: 'summary',
+  },
   author: {
     type: Sequelize.STRING,
     allowNull: false,

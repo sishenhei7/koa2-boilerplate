@@ -1,14 +1,36 @@
 import Sequelize from 'sequelize';
 import Blog from '../models/blog';
+import { checkUndef } from '../core/error';
 
 const Op = Sequelize.Op;
 
 export default {
-  async getAllBlog(ctx) {
-    const { search } = ctx.request.query;
-    let data = null;
+  async getBlog(ctx) {
+    const {
+      search = '',
+      limit = 10,
+      offset = 0,
+    } = ctx.request.query;
 
-    if (search) {
+    const count = await Blog.count({
+      where: {
+        [Op.or]: [
+          {
+            title: {
+              [Op.like]: `%${search}%`,
+            }
+          },
+          {
+            author: {
+              [Op.like]: `%${search}%`,
+            }
+          }
+        ],
+      },
+    });
+
+    let data = [];
+    if (count > 0) {
       data = await Blog.findAll({
         where: {
           [Op.or]: [
@@ -24,18 +46,47 @@ export default {
             }
           ],
         },
-        order: [
-          ['id'],
-        ],
-      });
-    } else {
-      data = await Blog.findAll({
+        limit: Number(limit),
+        offset: Number(offset),
         order: [
           ['id'],
         ],
       });
     }
 
-    return ctx.body = data;
+    return ctx.body = {
+      count,
+      data,
+    };
   },
+
+  async createBlog(ctx) {
+    const {
+      title,
+      tags,
+      summary,
+      content,
+      author,
+    } = ctx.request.body;
+
+    checkUndef({ title, tags, summary, content, author });
+
+    const hasBlog = await Blog.findOne({
+      where: {
+        title,
+      }
+    });
+
+    if (hasBlog) throw new ApiError('博客标题已存在');
+
+    const blog = await Blog.create({
+      title,
+      tags,
+      summary,
+      content,
+      author,
+    });
+
+    ctx.body = blog;
+  }
 };

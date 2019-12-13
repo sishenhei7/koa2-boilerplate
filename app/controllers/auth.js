@@ -1,13 +1,13 @@
 import bcrypt from 'bcrypt';
 import auth from '../utils/auth';
 import User from '../models/user';
-import ApiError from '../core/error';
+import { ApiError, checkUndef } from '../core/error';
 
 export default {
   async register(ctx) {
     const { username, password } = ctx.request.body;
 
-    if (!username || !password) throw new ApiError('INVALID_ARGUMENT');
+    checkUndef({ username, password });
 
     const hasUser = await User.findOne({
       where: {
@@ -18,17 +18,16 @@ export default {
     if (hasUser) throw new ApiError('用户已存在');
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const userInfo = await User.create({
+    await User.create({
       username,
       password: hashedPassword,
     });
-    ctx.body = userInfo;
   },
 
   async login(ctx) {
     const { username, password } = ctx.request.body;
 
-    if (!username || !password) throw (new ApiError('INVALID_ARGUMENT'));
+    checkUndef({ username, password });
 
     const user = await User.findOne({
       where: {

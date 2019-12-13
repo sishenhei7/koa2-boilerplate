@@ -24,7 +24,8 @@ const sequelize = new Sequelize(db.name, db.username, db.password, {
 
 // 创建模型
 sequelize.sync({
-  force: false
+  force: false,
+  alter: false,
 });
 
 // 测试连接

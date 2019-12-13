@@ -1,3 +1,4 @@
+import { isUndef } from "../utils/util";
 /**
  * 自定义Api异常
  */
@@ -92,7 +93,7 @@ const errorMap = {
   },
 };
 
-class ApiError extends Error {
+export class ApiError extends Error {
   // 构造方法
   constructor(errorName) {
     super();
@@ -111,4 +112,7 @@ class ApiError extends Error {
   }
 }
 
-export default ApiError;
+export function checkUndef(obj) {
+  const isValid = Object.keys(obj).some(item => isUndef(obj[item]));
+  if (isValid) throw new ApiError('INVALID_ARGUMENT');
+}

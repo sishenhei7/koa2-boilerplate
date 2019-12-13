@@ -1,4 +1,4 @@
-import ApiError from '../core/error';
+import { ApiError } from '../core/error';
 import { isDef } from '../utils/util';
 
 /**
