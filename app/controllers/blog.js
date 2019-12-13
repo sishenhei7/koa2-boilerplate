@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 import Blog from '../models/blog';
-import { checkUndef } from '../core/error';
+import { ApiError, checkUndef } from '../core/error';
 
 const Op = Sequelize.Op;
 
@@ -88,5 +88,19 @@ export default {
     });
 
     ctx.body = blog;
-  }
+  },
+
+  async deleteBlog(ctx) {
+    const { id } = ctx.params;
+
+    const count = await Blog.destroy({
+      where: {
+        id,
+      },
+    });
+
+    if (count === 0) throw new ApiError('没有此博客');
+
+    ctx.body = '';
+  },
 };

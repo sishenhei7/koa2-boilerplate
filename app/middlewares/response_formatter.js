@@ -1,12 +1,11 @@
 import { ApiError } from '../core/error';
-import { isDef } from '../utils/util';
 
 /**
  * 在app.use(router)之前调用
  */
 const responseFormatter = (ctx) => {
   // 如果有返回数据，将返回数据添加到data中
-  if (isDef(ctx.body)) {
+  if (ctx.body) {
     ctx.body = {
       code: 0,
       message: 'success',
