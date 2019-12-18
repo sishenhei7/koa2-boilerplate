@@ -154,6 +154,9 @@ export default {
       },
     });
 
+    blog.viewCount += 1;
+    blog.save();
+
     if (!blog) throw new ApiError('没有此博客');
 
     ctx.body = blog;

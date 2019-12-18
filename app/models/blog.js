@@ -31,6 +31,12 @@ Blog.init({
     allowNull: false,
     field: 'content',
   },
+  viewCount: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    field: 'view_count',
+    defaultValue: 0,
+  },
   createdAt: {
     type: Sequelize.DATE,
     defaultValue: Sequelize.NOW,
