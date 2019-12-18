@@ -9,7 +9,6 @@ User.init({
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
-    allowNull: true,
     autoIncrement: true,
   },
   username: {
@@ -24,14 +23,21 @@ User.init({
   },
   createdAt: {
     type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW,
+    get() {
+      return moment(this.getDataValue('createdAt')).format('YYYY-MM-DD HH:mm');
+    },
   },
   updatedAt: {
     type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW,
+    get() {
+      return moment(this.getDataValue('updatedAt')).format('YYYY-MM-DD HH:mm');
+    },
   },
 }, {
   sequelize,
   modelName: 'user',
-  freezeTableName: false,
 });
 
 export default User;

@@ -1,8 +1,22 @@
 import Sequelize from 'sequelize';
-import Blog from '../models/blog';
+import auth from '../utils/auth';
+import { Blog, Category, Tag } from '../models';
 import { ApiError, checkUndef } from '../core/error';
 
 const Op = Sequelize.Op;
+const include = [
+  {
+    model: Category,
+    attributes: ['id', 'name'],
+  },
+  {
+    model: Tag,
+    attributes: ['id', 'name'],
+    through: {
+      attributes: [],
+    },
+  }
+];
 
 export default {
   async getBlog(ctx) {
@@ -12,95 +26,133 @@ export default {
       offset = 0,
     } = ctx.request.query;
 
-    const count = await Blog.count({
-      where: {
-        [Op.or]: [
-          {
-            title: {
-              [Op.like]: `%${search}%`,
-            }
-          },
-          {
-            author: {
-              [Op.like]: `%${search}%`,
-            }
+    const where = {
+      [Op.or]: [
+        {
+          title: {
+            [Op.like]: `%${search}%`,
           }
-        ],
-      },
-    });
-
-    let data = [];
-    if (count > 0) {
-      data = await Blog.findAll({
-        where: {
-          [Op.or]: [
-            {
-              title: {
-                [Op.like]: `%${search}%`,
-              }
-            },
-            {
-              author: {
-                [Op.like]: `%${search}%`,
-              }
-            }
-          ],
         },
-        limit: Number(limit),
-        offset: Number(offset),
-        order: [
-          ['id'],
-        ],
-      });
+        {
+          author: {
+            [Op.like]: `%${search}%`,
+          }
+        }
+      ],
     }
 
-    return ctx.body = {
-      count,
-      data,
-    };
+    const count = await Blog.count({ where });
+    const data = await Blog.findAll({
+      where,
+      include,
+      limit: Number(limit),
+      offset: Number(offset),
+      order: [
+        ['id'],
+      ],
+    });
+
+    ctx.body = { count, data };
   },
 
   async createBlog(ctx) {
+    const { username } = auth.verifyHeaders(ctx);
     const {
       title,
+      category,
       tags,
       summary,
       content,
       author,
     } = ctx.request.body;
 
-    checkUndef({ title, tags, summary, content, author });
+    checkUndef({ title, category, tags, summary, content, author });
 
-    const hasBlog = await Blog.findOne({
+    const where = { title };
+    const defaults = { summary, content, author: username };
+    const [newBlog, success] = await Blog.findOrCreate({ where, defaults });
+
+    if (!success) throw new ApiError('博客标题已存在');
+
+    const [newCategory] = await Category.findOrCreate({
       where: {
-        title,
-      }
+        name: category,
+      },
+      defaults: {
+        name: category,
+      },
     });
+    await newBlog.setCategory(newCategory);
 
-    if (hasBlog) throw new ApiError('博客标题已存在');
+    const newTags = await Promise.all(tags.split(',').map(async (name) => {
+      const [newTag] = await Tag.findOrCreate({ where: { name }, defaults: { name } });
+      return newTag;
+    }));
+    await newBlog.setTags(newTags);
 
-    const blog = await Blog.create({
-      title,
-      tags,
-      summary,
-      content,
-      author,
-    });
-
-    ctx.body = blog;
+    ctx.body = '';
   },
 
   async deleteBlog(ctx) {
     const { id } = ctx.params;
 
-    const count = await Blog.destroy({
+    const where = { id };
+    const blog = await Blog.findOne({ where });
+
+    if (!blog) throw new ApiError('没有此博客');
+
+    await blog.setTags([]);
+    await blog.destroy();
+    ctx.body = '';
+  },
+
+  async updateBlog(ctx) {
+    const { id } = ctx.params;
+    const { body } = ctx.request;
+
+    const where = { id };
+    const blog = await Blog.findOne({ where });
+
+    if (!blog) throw new ApiError('没有此博客');
+    blog.update(body);
+
+    if (body.category) {
+      const [newCategory] = await Category.findOrCreate({
+        where: {
+          name: body.category,
+        },
+        defaults: {
+          name: body.category,
+        },
+      });
+      await blog.setCategory(null);
+      await blog.setCategory(newCategory);
+    }
+
+    if (body.tags) {
+      const newTags = await Promise.all(body.tags.split(',').map(async (name) => {
+        const [newTag] = await Tag.findOrCreate({ where: { name }, defaults: { name } });
+        return newTag;
+      }));
+      await blog.setTags([]);
+      await blog.setTags(newTags);
+    }
+
+    ctx.body = '';
+  },
+
+  async getBlogById(ctx) {
+    const { id } = ctx.params;
+
+    const blog = await Blog.findOne({
+      include,
       where: {
         id,
       },
     });
 
-    if (count === 0) throw new ApiError('没有此博客');
+    if (!blog) throw new ApiError('没有此博客');
 
-    ctx.body = '';
+    ctx.body = blog;
   },
 };

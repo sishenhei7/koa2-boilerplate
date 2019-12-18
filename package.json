@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node app --exec babel-node",
     "dev": "nodemon app --exec babel-node",
     "pm2": "NODE_ENV=production pm2 start app --interpreter babel-node",
     "restart": "NODE_ENV=production pm2 restart app --interpreter babel-node",
@@ -22,6 +21,7 @@
     "koa-jwt": "^3.6.0",
     "koa-logger": "^3.2.1",
     "log4js": "^6.1.0",
+    "moment": "^2.24.0",
     "mysql2": "^2.0.1",
     "sequelize": "^5.21.2"
   },
@@ -31,6 +31,7 @@
     "@babel/node": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
     "babel-eslint": "^10.0.3",
+    "babel-plugin-add-module-exports": "^1.0.2",
     "eslint": "^6.7.2",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-plugin-import": "^2.18.2",

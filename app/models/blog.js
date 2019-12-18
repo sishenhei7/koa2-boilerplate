@@ -1,5 +1,6 @@
-import sequelize from '../core/db';
+import moment from 'moment';
 import Sequelize from 'sequelize';
+import sequelize from '../core/db';
 
 const { Model } = Sequelize;
 
@@ -9,18 +10,11 @@ Blog.init({
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
-    allowNull: true,
     autoIncrement: true,
   },
   title: {
     type: Sequelize.STRING,
     allowNull: false,
-    field: 'title',
-  },
-  tags: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    field: 'tags',
   },
   summary: {
     type: Sequelize.STRING,
@@ -39,14 +33,21 @@ Blog.init({
   },
   createdAt: {
     type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW,
+    get() {
+      return moment(this.getDataValue('createdAt')).format('YYYY-MM-DD HH:mm');
+    },
   },
   updatedAt: {
     type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW,
+    get() {
+      return moment(this.getDataValue('updatedAt')).format('YYYY-MM-DD HH:mm');
+    },
   },
 }, {
   sequelize,
   modelName: 'blog',
-  freezeTableName: false,
 });
 
 export default Blog;

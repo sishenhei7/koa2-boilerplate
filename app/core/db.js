@@ -7,9 +7,13 @@ const sequelize = new Sequelize(db.name, db.username, db.password, {
   host: db.host,
   port: db.port,
   dialect: 'mysql',
+  define: {
+    charset: 'utf8mb4', // 字符集
+    freezeTableName: true, //冻结表名 否则表名自动变成复数
+    underscored: true, // 字段以下划线（_）来分割（默认是驼峰命名风格）
+  },
   dialectOptions: {
-    // 字符集
-    charset: 'utf8mb4',
+    charset: 'utf8mb4', // 字符集
     supportBigNumbers: true,
     bigNumberStrings: true,
   },
@@ -19,23 +23,24 @@ const sequelize = new Sequelize(db.name, db.username, db.password, {
     acquire: 30000,
     idle: 10000,
   },
-  timezone: '+08:00', // 东八时区
-});
-
-// 创建模型
-sequelize.sync({
-  force: false,
-  alter: false,
+  logging: true, //操作时候显示原始的sql语句
+  timezone: '+08:00', // 设置为北京时间
 });
 
 // 测试连接
 sequelize
   .authenticate()
   .then(() => {
-    console.log('Connection has been established successfully.');
+    console.log('MYSQL 连接成功......');
   })
   .catch((err) => {
-    console.error('Unable to connect to the database:', err);
+    console.error('MYSQL 链接失败:', err);
   });
+
+// 创建模型
+sequelize.sync({
+  force: false,
+  alter: false,
+});
 
 export default sequelize;

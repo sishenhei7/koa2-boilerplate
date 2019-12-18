@@ -11,7 +11,7 @@ const responseFormatter = (ctx) => {
       message: 'success',
       data: ctx.body,
     }
-  } else {
+  } else if (ctx.body === '') {
     ctx.body = {
       code: 0,
       message: 'success',
@@ -34,7 +34,7 @@ const responseHandler = () => async (ctx, next) => {
     await next();
 
     // 处理 404
-    if (!ctx.body && (!ctx.status || ctx.status === 404)) {
+    if (!ctx.body && (!ctx.status || ctx.status === 404 || ctx.status === 204)) {
       return errorFormatter(ctx, new ApiError('NOT_FOUND'));
     }
   } catch (error) {
