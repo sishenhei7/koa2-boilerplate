@@ -1,5 +1,5 @@
-import sequelize from '../core/db';
 import Sequelize from 'sequelize';
+import sequelize from '../core/db';
 
 const { Model } = Sequelize;
 

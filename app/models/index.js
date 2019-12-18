@@ -26,7 +26,7 @@ Tag.belongsToMany(Blog, {
   constraints: false,
 });
 
-export default {
+export {
   User,
   Blog,
   Category,

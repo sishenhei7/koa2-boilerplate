@@ -14,6 +14,6 @@ export default async (ctx, next) => {
     logUtil.logError(ctx, err, ms);
 
     // 继续抛错误
-    throw(err);
+    throw (err);
   }
 }

@@ -8,7 +8,7 @@
     "restart": "NODE_ENV=production pm2 restart app --interpreter babel-node",
     "stop": "pm2 stop app",
     "logs": "pm2 logs app",
-    "lint": "eslint --fix **/*.js",
+    "lint": "eslint --fix app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -31,7 +31,6 @@
     "@babel/node": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
     "babel-eslint": "^10.0.3",
-    "babel-plugin-add-module-exports": "^1.0.2",
     "eslint": "^6.7.2",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-plugin-import": "^2.18.2",

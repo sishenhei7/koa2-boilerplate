@@ -28,6 +28,7 @@ const errorFormatter = (ctx, err) => {
   return ctx.body;
 }
 
+/* eslint-disable consistent-return */
 const responseHandler = () => async (ctx, next) => {
   try {
     // 先去执行路由
@@ -59,7 +60,7 @@ const responseHandler = () => async (ctx, next) => {
   // 处理 405
   if (!ctx.body && ctx.status === 405) {
     return errorFormatter(ctx, new ApiError('METHOD_NOT_ALLOWED'));
-  } else if (ctx.status === 200) {
+  } if (ctx.status === 200) {
     return responseFormatter(ctx);
   }
 }

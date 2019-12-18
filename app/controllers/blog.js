@@ -3,7 +3,7 @@ import auth from '../utils/auth';
 import { Blog, Category, Tag } from '../models';
 import { ApiError, checkUndef } from '../core/error';
 
-const Op = Sequelize.Op;
+const { Op } = Sequelize;
 
 // 查询结果带上 category 和 tags
 const include = [
@@ -17,14 +17,14 @@ const include = [
     through: {
       attributes: [],
     },
-  }
+  },
 ];
 
 // 绑定 category
 const setBlogCategory = async (blog, category) => {
   const name = category;
   const [newCategory] = await Category.findOrCreate({ where: { name }, defaults: { name } });
-  return await blog.setCategory(newCategory);
+  return blog.setCategory(newCategory);
 };
 
 // 绑定 tags
@@ -33,7 +33,7 @@ const setBlogTags = async (blog, tags) => {
     const [newTag] = await Tag.findOrCreate({ where: { name }, defaults: { name } });
     return newTag;
   }));
-  return await blog.setTags(newTags);
+  return blog.setTags(newTags);
 };
 
 export default {
@@ -49,15 +49,15 @@ export default {
         {
           title: {
             [Op.like]: `%${search}%`,
-          }
+          },
         },
         {
           author: {
             [Op.like]: `%${search}%`,
-          }
-        }
+          },
+        },
       ],
-    }
+    };
 
     const count = await Blog.count({ where });
     const data = await Blog.findAll({
@@ -84,7 +84,9 @@ export default {
       author,
     } = ctx.request.body;
 
-    checkUndef({ title, category, tags, summary, content, author });
+    checkUndef({
+      title, category, tags, summary, content, author,
+    });
 
     const where = { title };
     const defaults = { summary, content, author: username };

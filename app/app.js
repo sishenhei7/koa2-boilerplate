@@ -39,7 +39,7 @@ app.use(
     allowMethods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH'],
     allowHeaders: ['Content-Type', 'Authorization'],
     exposeHeaders: ['Content-Length', 'Date', 'X-Request-Id'],
-  })
+  }),
 );
 
 // 设置 jwt

@@ -1,4 +1,4 @@
-import { isUndef } from "../utils/util";
+import { isUndef } from '../utils/util';
 /**
  * 自定义Api异常
  */
@@ -25,71 +25,71 @@ const errorMap = {
   // },
   BAD_REQUEST: {
     code: 400,
-    message: '请求失败，语义有误或参数有误'
+    message: '请求失败，语义有误或参数有误',
   },
   UNAUTHORIZED: {
     code: 401,
-    message: '需要授权'
+    message: '需要授权',
   },
   FORBIDDEN: {
     code: 403,
-    message: '服务器拒绝执行'
+    message: '服务器拒绝执行',
   },
   NOT_FOUND: {
     code: 404,
-    message: '请求失败，未发现资源'
+    message: '请求失败，未发现资源',
   },
   METHOD_NOT_ALLOWED: {
     code: 405,
-    message: '请求失败，请求方法不正确'
+    message: '请求失败，请求方法不正确',
   },
   NOT_ACCEPTABLE: {
     code: 406,
-    message: '请求条件无法满足'
+    message: '请求条件无法满足',
   },
   REQUEST_TIMEOUT: {
     code: 408,
-    message: '请求超时'
+    message: '请求超时',
   },
   CONFLICT: {
     code: 409,
-    message: '请求存在冲突'
+    message: '请求存在冲突',
   },
   REQUEST_ENTITY_TOO_LARGE: {
     code: 413,
-    message: '请求头数据量太大'
+    message: '请求头数据量太大',
   },
   UNSUPPORTED_MEDIA_TYPE: {
     code: 415,
-    message: '请求格式不正确'
+    message: '请求格式不正确',
   },
   UNPROCESSABLE_ENTITY: {
     code: 422,
-    message: '语义错误'
+    message: '语义错误',
   },
   TOO_MANY_REQUESTS: {
     code: 429,
-    message: '请求过多'
+    message: '请求过多',
   },
   INTERNAL_SERVER_ERROR: {
     code: 500,
-    message: '服务器错误'
+    message: '服务器错误',
   },
   NOT_IMPLEMENTED: {
     code: 501,
-    message: '请求方法不被支持'
+    message: '请求方法不被支持',
   },
   BAD_GATEWAY: {
     code: 502,
-    message: '网关错误'
+    message: '网关错误',
   },
   SERVICE_UNAVAILABLE: {
     code: 503,
-    message: '服务器不可用'
+    message: '服务器不可用',
   },
   GATEWAY_TIMEOUT: {
     code: 504,
-    message: '网关超时'
+    message: '网关超时',
   },
 };
 
@@ -113,6 +113,6 @@ export class ApiError extends Error {
 }
 
 export function checkUndef(obj) {
-  const isValid = Object.keys(obj).some(item => isUndef(obj[item]));
+  const isValid = Object.keys(obj).some((item) => isUndef(obj[item]));
   if (isValid) throw new ApiError('INVALID_ARGUMENT');
 }
