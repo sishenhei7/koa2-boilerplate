@@ -1,7 +1,7 @@
 import { User } from '../models';
 
 export default {
-  async getAllUsers(ctx) {
+  async getUser(ctx) {
     const users = await User.findAll({
       attributes: {
         exclude: ['password'],
@@ -14,4 +14,3 @@ export default {
     ctx.body = users;
   },
 };
-

@@ -4,6 +4,8 @@ import { Blog, Category, Tag } from '../models';
 import { ApiError, checkUndef } from '../core/error';
 
 const Op = Sequelize.Op;
+
+// 查询结果带上 category 和 tags
 const include = [
   {
     model: Category,
@@ -17,6 +19,22 @@ const include = [
     },
   }
 ];
+
+// 绑定 category
+const setBlogCategory = async (blog, category) => {
+  const name = category;
+  const [newCategory] = await Category.findOrCreate({ where: { name }, defaults: { name } });
+  return await blog.setCategory(newCategory);
+};
+
+// 绑定 tags
+const setBlogTags = async (blog, tags) => {
+  const newTags = await Promise.all(tags.split(',').map(async (name) => {
+    const [newTag] = await Tag.findOrCreate({ where: { name }, defaults: { name } });
+    return newTag;
+  }));
+  return await blog.setTags(newTags);
+};
 
 export default {
   async getBlog(ctx) {
@@ -74,32 +92,22 @@ export default {
 
     if (!success) throw new ApiError('博客标题已存在');
 
-    const [newCategory] = await Category.findOrCreate({
-      where: {
-        name: category,
-      },
-      defaults: {
-        name: category,
-      },
-    });
-    await newBlog.setCategory(newCategory);
-
-    const newTags = await Promise.all(tags.split(',').map(async (name) => {
-      const [newTag] = await Tag.findOrCreate({ where: { name }, defaults: { name } });
-      return newTag;
-    }));
-    await newBlog.setTags(newTags);
-
+    setBlogCategory(newBlog, category);
+    setBlogTags(newBlog, tags);
     ctx.body = '';
   },
 
   async deleteBlog(ctx) {
+    const { username, role } = auth.verifyHeaders(ctx);
     const { id } = ctx.params;
 
     const where = { id };
     const blog = await Blog.findOne({ where });
 
-    if (!blog) throw new ApiError('没有此博客');
+    if (!blog) throw new ApiError('没有此博客！');
+    if (blog.username !== username && role === 'general') {
+      throw new ApiError('只有原作者或管理员才能删除此博客！');
+    }
 
     await blog.setTags([]);
     await blog.destroy();
@@ -109,33 +117,26 @@ export default {
   async updateBlog(ctx) {
     const { id } = ctx.params;
     const { body } = ctx.request;
+    const { username, role } = auth.verifyHeaders(ctx);
 
     const where = { id };
     const blog = await Blog.findOne({ where });
 
     if (!blog) throw new ApiError('没有此博客');
+    if (blog.username !== username && role === 'general') {
+      throw new ApiError('只有原作者或管理员才能修改此博客！');
+    }
+
     blog.update(body);
 
     if (body.category) {
-      const [newCategory] = await Category.findOrCreate({
-        where: {
-          name: body.category,
-        },
-        defaults: {
-          name: body.category,
-        },
-      });
       await blog.setCategory(null);
-      await blog.setCategory(newCategory);
+      await setBlogCategory(blog, body.category);
     }
 
     if (body.tags) {
-      const newTags = await Promise.all(body.tags.split(',').map(async (name) => {
-        const [newTag] = await Tag.findOrCreate({ where: { name }, defaults: { name } });
-        return newTag;
-      }));
       await blog.setTags([]);
-      await blog.setTags(newTags);
+      await setBlogTags(blog, body.tags);
     }
 
     ctx.body = '';

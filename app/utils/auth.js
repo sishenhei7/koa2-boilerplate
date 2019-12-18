@@ -6,8 +6,8 @@ const { jwt: { secret, expiresIn } } = settings;
 
 const auth = {
   sign: (user) => {
-    const { id, username } = user;
-    const token = jwt.sign({ id, username }, secret, { expiresIn });
+    const { id, username, role } = user;
+    const token = jwt.sign({ id, username, role }, secret, { expiresIn });
     return token;
   },
 

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import sequelize from '../core/db';
 import Sequelize from 'sequelize';
 
@@ -20,6 +21,12 @@ User.init({
     type: Sequelize.STRING,
     allowNull: false,
     field: 'password',
+  },
+  role: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    field: 'role',
+    defaultValue: 'general',
   },
   createdAt: {
     type: Sequelize.DATE,

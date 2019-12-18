@@ -51,4 +51,50 @@ export default {
     auth.verifyHeaders(ctx);
     ctx.body = '认证成功';
   },
+
+  async registerAdmin(ctx) {
+    const { username, password } = ctx.request.body;
+
+    checkUndef({ username, password });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await User.findOrCreate({
+      where: {
+        username,
+      },
+      defaults: {
+        username,
+        password: hashedPassword,
+        role: 'admin',
+      },
+    });
+
+    if (!newUser[1]) throw new ApiError('用户已存在');
+
+    const token = auth.sign(newUser);
+    ctx.body = token;
+  },
+
+  async registerRoot(ctx) {
+    const { username, password } = ctx.request.body;
+
+    checkUndef({ username, password });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await User.findOrCreate({
+      where: {
+        username,
+      },
+      defaults: {
+        username,
+        password: hashedPassword,
+        role: 'root',
+      },
+    });
+
+    if (!newUser[1]) throw new ApiError('用户已存在');
+
+    const token = auth.sign(newUser);
+    ctx.body = token;
+  },
 };

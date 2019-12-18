@@ -40,7 +40,7 @@ sequelize
 // 创建模型
 sequelize.sync({
   force: false,
-  alter: false,
+  alter: true,
 });
 
 export default sequelize;
