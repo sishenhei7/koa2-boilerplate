@@ -7,6 +7,7 @@ const { jwt: { secret, expiresIn } } = settings;
 const auth = {
   sign: (user) => {
     const { id, username, role } = user;
+    console.log('iddddd', id);
     const token = jwt.sign({ id, username, role }, secret, { expiresIn });
     return token;
   },
@@ -20,6 +21,15 @@ const auth = {
     } catch (err) {
       throw (new ApiError('认证失败'));
     }
+  },
+
+  verifyAdmin: (ctx) => {
+    const info = auth.verifyHeaders(ctx);
+    const { role } = info;
+
+    if (role !== 'root' && role !== 'admin') throw new ApiError('只有管理员才能查看用户！');
+
+    return info;
   },
 }
 

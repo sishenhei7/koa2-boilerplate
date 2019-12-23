@@ -22,7 +22,7 @@ export default {
 
     if (!newUser[1]) throw new ApiError('用户已存在');
 
-    const token = auth.sign(newUser);
+    const token = auth.sign(newUser[0]);
     ctx.body = token;
   },
 
@@ -71,7 +71,7 @@ export default {
 
     if (!newUser[1]) throw new ApiError('用户已存在');
 
-    const token = auth.sign(newUser);
+    const token = auth.sign(newUser[0]);
     ctx.body = token;
   },
 
@@ -94,7 +94,7 @@ export default {
 
     if (!newUser[1]) throw new ApiError('用户已存在');
 
-    const token = auth.sign(newUser);
+    const token = auth.sign(newUser[0]);
     ctx.body = token;
   },
 };

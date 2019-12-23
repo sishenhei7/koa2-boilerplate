@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 import auth from '../utils/auth';
-import { Blog, Category, Tag } from '../models';
+import { User, Blog, Category, Tag, Comment } from '../models';
 import { ApiError, checkUndef } from '../core/error';
 
 const { Op } = Sequelize;
@@ -16,6 +16,16 @@ const include = [
     attributes: ['id', 'name'],
     through: {
       attributes: [],
+    },
+  },
+  {
+    model: Comment,
+    attributes: ['id', 'content'],
+  },
+  {
+    model: User,
+    attributes: {
+      exclude: ['password'],
     },
   },
 ];
@@ -39,7 +49,7 @@ const setBlogTags = async (blog, tags) => {
 export default {
   async getBlog(ctx) {
     const {
-      search = '',
+      search = '', // 模糊搜索 标题 + 作者
       limit = 10,
       offset = 0,
     } = ctx.request.query;
@@ -52,16 +62,27 @@ export default {
           },
         },
         {
-          author: {
+          '$user.username$': {
             [Op.like]: `%${search}%`,
           },
         },
       ],
     };
 
-    const count = await Blog.count({ where });
+    const queryInclude = [
+      {
+        model: User,
+      },
+    ];
+
+    const count = await Blog.count({
+      where,
+      subQuery: false,
+      include: queryInclude,
+    });
     const data = await Blog.findAll({
       where,
+      subQuery: false,
       include,
       limit: Number(limit),
       offset: Number(offset),
@@ -74,44 +95,47 @@ export default {
   },
 
   async createBlog(ctx) {
-    const { username } = auth.verifyHeaders(ctx);
+    const { id: userId } = auth.verifyHeaders(ctx);
     const {
       title,
       category,
       tags,
       summary,
       content,
-      author,
     } = ctx.request.body;
 
     checkUndef({
-      title, category, tags, summary, content, author,
+      title, category, tags, summary, content,
     });
 
     const where = { title };
-    const defaults = { summary, content, author: username };
+    const defaults = {
+      title,
+      summary,
+      content,
+      userId,
+    };
     const [newBlog, success] = await Blog.findOrCreate({ where, defaults });
 
     if (!success) throw new ApiError('博客标题已存在');
 
-    setBlogCategory(newBlog, category);
-    setBlogTags(newBlog, tags);
+    await setBlogCategory(newBlog, category);
+    await setBlogTags(newBlog, tags);
     ctx.body = '';
   },
 
   async deleteBlog(ctx) {
-    const { username, role } = auth.verifyHeaders(ctx);
+    const { id: userId, role } = auth.verifyHeaders(ctx);
     const { id } = ctx.params;
 
     const where = { id };
     const blog = await Blog.findOne({ where });
 
     if (!blog) throw new ApiError('没有此博客！');
-    if (blog.username !== username && role === 'general') {
+    if (blog.userId !== userId && role === 'general') {
       throw new ApiError('只有原作者或管理员才能删除此博客！');
     }
 
-    await blog.setTags([]);
     await blog.destroy();
     ctx.body = '';
   },
@@ -119,13 +143,13 @@ export default {
   async updateBlog(ctx) {
     const { id } = ctx.params;
     const { body } = ctx.request;
-    const { username, role } = auth.verifyHeaders(ctx);
+    const { id: userId, role } = auth.verifyHeaders(ctx);
 
     const where = { id };
     const blog = await Blog.findOne({ where });
 
     if (!blog) throw new ApiError('没有此博客');
-    if (blog.username !== username && role === 'general') {
+    if (blog.userId !== userId && role === 'general') {
       throw new ApiError('只有原作者或管理员才能修改此博客！');
     }
 
@@ -154,11 +178,10 @@ export default {
       },
     });
 
-    blog.viewCount += 1;
-    blog.save();
-
     if (!blog) throw new ApiError('没有此博客');
 
+    blog.viewCount += 1;
+    blog.save();
     ctx.body = blog;
   },
 };

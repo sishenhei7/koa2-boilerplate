@@ -12,6 +12,10 @@ Blog.init({
     primaryKey: true,
     autoIncrement: true,
   },
+  userId: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+  },
   title: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -20,11 +24,6 @@ Blog.init({
     type: Sequelize.STRING,
     allowNull: false,
     field: 'summary',
-  },
-  author: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    field: 'author',
   },
   content: {
     type: Sequelize.STRING,

@@ -11,10 +11,10 @@ export default {
     secret: 'secret',
     expiresIn: '1d', // 默认单位：秒
     ignoredPath: [
-      /^\/api\/(?!(user))/,
+      // /^\/api\/(?!(user))/,
       // /^\/api\/login/,
       // /^\/api\/register/,
-      // /^\/api\/blog/,
+      /^\/api/,
     ],
   },
 };

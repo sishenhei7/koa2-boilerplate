@@ -13,6 +13,16 @@ Comment.init({
     primaryKey: true,
     autoIncrement: true,
   },
+  userId: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    field: 'user_id',
+  },
+  blogId: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    field: 'blog_id',
+  },
   content: {
     type: Sequelize.STRING,
     allowNull: false,
