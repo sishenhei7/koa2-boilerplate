@@ -1,9 +1,9 @@
-import { initLogPath, logUtil } from './utils/logger';
+import { initLogPath, logUtil } from '../utils/logger';
 
 /**
  * 打印请求日志
  */
-export default (ctx, next) => {
+export default () => async (ctx, next) => {
   if (process.env.NODE_ENV !== 'production') {
 
     const start = new Date();

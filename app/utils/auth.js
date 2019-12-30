@@ -26,7 +26,7 @@ const auth = {
     const info = auth.verifyHeaders(ctx);
     const { role } = info;
 
-    assert(role === 'general', '只有管理员才能查看用户');
+    assert(role !== 'general', '只有管理员才能查看用户');
 
     return info;
   },

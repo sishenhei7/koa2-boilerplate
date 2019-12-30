@@ -15,7 +15,7 @@ const app = new Koa();
 app.use(responseFormatter('^/api'));
 
 // 记录日志
-app.use(logger);
+app.use(logger());
 
 // 设置Header
 app.use(async (ctx, next) => {
