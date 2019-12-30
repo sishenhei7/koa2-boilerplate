@@ -1,6 +1,6 @@
+import assert from 'assert';
 import { Category } from '../models';
 import auth from '../utils/auth';
-import { ApiError } from '../core/error';
 
 export default {
   async getCategory(ctx) {
@@ -23,7 +23,7 @@ export default {
     const where = { id };
     const category = await Category.findOne({ where });
 
-    if (!category) throw new ApiError('没有此类别！');
+    assert(category, '没有此类别');
 
     await category.destroy();
     ctx.body = '';

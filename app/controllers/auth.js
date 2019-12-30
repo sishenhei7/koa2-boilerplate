@@ -1,13 +1,14 @@
 import bcrypt from 'bcrypt';
+import assert from 'assert';
 import auth from '../utils/auth';
 import { User } from '../models';
-import { ApiError, checkUndef } from '../core/error';
 
 export default {
   async register(ctx) {
     const { username, password } = ctx.request.body;
 
-    checkUndef({ username, password });
+    assert(username, '用户名不能为空');
+    assert(password, '密码不能为空');
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.findOrCreate({
@@ -20,7 +21,7 @@ export default {
       },
     });
 
-    if (!newUser[1]) throw new ApiError('用户已存在');
+    assert(newUser[1], '用户已存在');
 
     const token = auth.sign(newUser[0]);
     ctx.body = token;
@@ -29,7 +30,8 @@ export default {
   async login(ctx) {
     const { username, password } = ctx.request.body;
 
-    checkUndef({ username, password });
+    assert(username, '用户名不能为空');
+    assert(password, '密码不能为空');
 
     const user = await User.findOne({
       where: {
@@ -37,11 +39,11 @@ export default {
       },
     });
 
-    if (!user) throw (new ApiError('用户不存在'));
+    assert(user, '用户不存在');
 
     const isUserValid = bcrypt.compare(password, user.password);
 
-    if (!isUserValid) throw (new ApiError('用户密码错误'));
+    assert(isUserValid, '用户密码错误');
 
     const token = auth.sign(user);
     ctx.body = token;
@@ -55,7 +57,8 @@ export default {
   async registerAdmin(ctx) {
     const { username, password } = ctx.request.body;
 
-    checkUndef({ username, password });
+    assert(username, '用户名不能为空');
+    assert(password, '密码不能为空');
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.findOrCreate({
@@ -69,7 +72,7 @@ export default {
       },
     });
 
-    if (!newUser[1]) throw new ApiError('用户已存在');
+    assert(newUser[1], '用户已存在');
 
     const token = auth.sign(newUser[0]);
     ctx.body = token;
@@ -78,7 +81,8 @@ export default {
   async registerRoot(ctx) {
     const { username, password } = ctx.request.body;
 
-    checkUndef({ username, password });
+    assert(username, '用户名不能为空');
+    assert(password, '密码不能为空');
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.findOrCreate({
@@ -92,7 +96,7 @@ export default {
       },
     });
 
-    if (!newUser[1]) throw new ApiError('用户已存在');
+    assert(newUser[1], '用户已存在');
 
     const token = auth.sign(newUser[0]);
     ctx.body = token;

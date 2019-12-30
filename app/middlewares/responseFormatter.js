@@ -1,4 +1,4 @@
-import { ApiError } from '../core/error';
+import assert from 'assert';
 
 /**
  * 在app.use(router)之前调用
@@ -7,23 +7,23 @@ const responseFormatter = (ctx) => {
   // 如果有返回数据，将返回数据添加到data中
   if (ctx.body) {
     ctx.body = {
-      code: 0,
+      ok: true,
       message: 'success',
       data: ctx.body,
     }
   } else if (ctx.body === '') {
     ctx.body = {
-      code: 0,
+      ok: true,
       message: 'success',
     }
   }
 }
 
-const errorFormatter = (ctx, err) => {
+const errorFormatter = (ctx, msg) => {
   ctx.status = 200;
   ctx.body = {
-    code: err.code,
-    message: err.message,
+    ok: false,
+    message: msg,
   }
   return ctx.body;
 }
@@ -33,34 +33,37 @@ const responseHandler = () => async (ctx, next) => {
   try {
     // 先去执行路由
     await next();
-
-    // 处理 404
-    if (!ctx.body && (!ctx.status || ctx.status === 404 || ctx.status === 204)) {
-      return errorFormatter(ctx, new ApiError('NOT_FOUND'));
-    }
-  } catch (error) {
+  } catch (err) {
     // 非生产环境打印错误便于调试
     if (process.env.NODE_ENV !== 'production') {
-      console.log('error', error);
+      console.log('error', err);
     }
 
-    // 处理抛出的 ApiError 错误
-    if (error instanceof ApiError) {
-      return errorFormatter(ctx, error);
+    // 处理抛出的 assert 错误
+    if (err instanceof assert.AssertionError) {
+      return errorFormatter(ctx, err.message);
     }
 
     // 处理 jwt 认证失败
-    if (error.status === 401) {
-      return errorFormatter(ctx, new ApiError('UNAUTHORIZED'));
+    if (err.status === 401) {
+      return errorFormatter(ctx, 'Unauthorized');
     }
 
-    return errorFormatter(ctx, new ApiError('INTERNAL_SERVER_ERROR'));
+    return errorFormatter(ctx, 'Internal Server Error');
+  }
+
+  // 处理 404
+  if (!ctx.body && (!ctx.status || ctx.status === 404 || ctx.status === 204)) {
+    return errorFormatter(ctx, 'Not Found');
   }
 
   // 处理 405
   if (!ctx.body && ctx.status === 405) {
-    return errorFormatter(ctx, new ApiError('METHOD_NOT_ALLOWED'));
-  } if (ctx.status === 200) {
+    return errorFormatter(ctx, 'Method Not Allowed');
+  }
+
+  // 正常返回
+  if (ctx.status === 200) {
     return responseFormatter(ctx);
   }
 }

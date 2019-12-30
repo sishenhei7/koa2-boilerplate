@@ -14,12 +14,12 @@
   "dependencies": {
     "@koa/cors": "^2.2.3",
     "@koa/router": "^8.0.3",
+    "assert": "^2.0.0",
     "bcrypt": "^3.0.7",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "koa-jwt": "^3.6.0",
-    "koa-logger": "^3.2.1",
     "log4js": "^6.1.0",
     "moment": "^2.24.0",
     "mysql2": "^2.0.1",

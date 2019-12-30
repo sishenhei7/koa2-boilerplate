@@ -1,6 +1,6 @@
+import assert from 'assert';
 import auth from '../utils/auth';
 import { User, Comment } from '../models';
-import { ApiError, checkUndef } from '../core/error';
 
 export default {
   async getComment(ctx) {
@@ -22,7 +22,8 @@ export default {
     const { id: userId } = auth.verifyHeaders(ctx);
     const { blogId, content } = ctx.request.body;
 
-    checkUndef({ blogId, content });
+    assert(blogId, '博客id不能为空');
+    assert(content, '评论内容不能为空');
 
     const comment = await Comment.create({
       content,
@@ -39,7 +40,7 @@ export default {
     const where = { id };
     const comment = await Comment.findOne({ where });
 
-    if (!comment) throw new ApiError('没有此评论！');
+    assert(comment, '没有此评论');
 
     await comment.destroy();
     ctx.body = '';

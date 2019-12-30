@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
+import assert from 'assert';
 import auth from '../utils/auth';
 import { User, Blog, Category, Tag, Comment } from '../models';
-import { ApiError, checkUndef } from '../core/error';
 
 const { Op } = Sequelize;
 
@@ -104,9 +104,11 @@ export default {
       content,
     } = ctx.request.body;
 
-    checkUndef({
-      title, category, tags, summary, content,
-    });
+    assert(title, '标题不能为空');
+    assert(category, '类别不能为空');
+    assert(tags, '标签不能为空');
+    assert(summary, '摘要不能为空');
+    assert(content, '内容不能为空');
 
     const where = { title };
     const defaults = {
@@ -117,7 +119,7 @@ export default {
     };
     const [newBlog, success] = await Blog.findOrCreate({ where, defaults });
 
-    if (!success) throw new ApiError('博客标题已存在');
+    assert(success, '博客标题已存在');
 
     await setBlogCategory(newBlog, category);
     await setBlogTags(newBlog, tags);
@@ -131,10 +133,13 @@ export default {
     const where = { id };
     const blog = await Blog.findOne({ where });
 
-    if (!blog) throw new ApiError('没有此博客！');
-    if (blog.userId !== userId && role === 'general') {
-      throw new ApiError('只有原作者或管理员才能删除此博客！');
-    }
+    assert(blog, '没有此博客');
+    assert(
+      role === 'general' && blog.userId === userId
+      || role === 'admin'
+      || role === 'root',
+      '只有原作者或管理员才能删除此博客'
+    );
 
     await blog.destroy();
     ctx.body = '';
@@ -148,10 +153,13 @@ export default {
     const where = { id };
     const blog = await Blog.findOne({ where });
 
-    if (!blog) throw new ApiError('没有此博客');
-    if (blog.userId !== userId && role === 'general') {
-      throw new ApiError('只有原作者或管理员才能修改此博客！');
-    }
+    assert(blog, '没有此博客');
+    assert(
+      role === 'general' && blog.userId === userId ||
+      role === 'admin' ||
+      role === 'root',
+      '只有原作者或管理员才能修改此博客！'
+    );
 
     blog.update(body);
 
@@ -178,7 +186,7 @@ export default {
       },
     });
 
-    if (!blog) throw new ApiError('没有此博客');
+    assert(blog, '没有此博客');
 
     blog.viewCount += 1;
     blog.save();

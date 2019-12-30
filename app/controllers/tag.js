@@ -1,5 +1,5 @@
+import assert from 'assert';
 import { Tag } from '../models';
-import { ApiError } from '../core/error';
 
 export default {
   async getTag(ctx) {
@@ -22,10 +22,8 @@ export default {
     const where = { id };
     const tag = await Tag.findOne({ where });
 
-    if (!tag) throw new ApiError('没有此标签！');
-    if (role === 'general') {
-      throw new ApiError('只有管理员才能删除标签！');
-    }
+    assert(tag, '没有此标签');
+    assert(role !== 'general', '只有管理员才能删除标签');
 
     await tag.destroy();
     ctx.body = '';

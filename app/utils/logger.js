@@ -95,10 +95,8 @@ function formatReqLog(req, resTime) {
   return logText;
 }
 
-export default logUtil;
-
 // 确定目录是否存在，如果不存在则创建目录
-export function confirmPath(pathStr) {
+const confirmPath = (pathStr) => {
   if (!fs.existsSync(pathStr)) {
     fs.mkdirSync(pathStr);
     console.log(`createPath: ${pathStr}`);
@@ -106,7 +104,7 @@ export function confirmPath(pathStr) {
 }
 
 // 初始化log相关目录
-export function initLogPath() {
+const initLogPath = () => {
   // 创建log的根目录'logs'
   if (logConfig.baseLogPath) {
     confirmPath(logConfig.baseLogPath)
@@ -118,3 +116,8 @@ export function initLogPath() {
     }
   }
 }
+
+export {
+  log4js,
+  initLogPath,
+};

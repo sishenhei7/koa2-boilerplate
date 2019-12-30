@@ -1,36 +1,27 @@
 import Koa from 'koa';
 import bodyparser from 'koa-bodyparser';
-import logger from 'koa-logger';
 import cors from '@koa/cors';
 import koaJwt from 'koa-jwt';
 
 import settings from './config/settings';
-import { initLogPath } from './core/logger';
 import router from './routes';
 
-import responseFormatter from './middlewares/response_formatter';
-import loggerDevelopment from './middlewares/logger_development';
-import loggerProduction from './middlewares/logger_production';
+import logger from './middlewares/logger';
+import responseFormatter from './middlewares/responseFormatter';
 
 const app = new Koa();
 
 // 全局响应处理
 app.use(responseFormatter('^/api'));
 
+// 记录日志
+app.use(logger);
+
 // 设置Header
 app.use(async (ctx, next) => {
   await next();
   ctx.set('X-Powered-By', 'Koa2-boilerplate');
 })
-
-// 记录日志
-if (process.env.NODE_ENV !== 'production') {
-  app.use(logger());
-  app.use(loggerDevelopment);
-} else {
-  initLogPath();
-  app.use(loggerProduction);
-}
 
 // 设置跨域
 app.use(

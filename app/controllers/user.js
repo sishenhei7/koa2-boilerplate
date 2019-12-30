@@ -1,6 +1,6 @@
+import assert from 'assert';
 import { User, Blog, Comment } from '../models';
 import auth from '../utils/auth';
-import { ApiError } from '../core/error';
 
 export default {
   async getUser(ctx) {
@@ -25,7 +25,7 @@ export default {
     const where = { id };
     const user = await User.findOne({ where });
 
-    if (!user) throw new ApiError('没有此用户！');
+    assert(user, '没有此用户');
 
     await Blog.destroy({ where: { userId: id } });
     await Comment.destroy({ where: { userId: id } });

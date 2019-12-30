@@ -1,13 +1,12 @@
 import jwt from 'jsonwebtoken';
+import assert from 'assert';
 import settings from '../config/settings';
-import { ApiError } from '../core/error';
 
 const { jwt: { secret, expiresIn } } = settings;
 
 const auth = {
   sign: (user) => {
     const { id, username, role } = user;
-    console.log('iddddd', id);
     const token = jwt.sign({ id, username, role }, secret, { expiresIn });
     return token;
   },
@@ -19,7 +18,7 @@ const auth = {
       const info = jwt.verify(token, secret);
       return info;
     } catch (err) {
-      throw (new ApiError('认证失败'));
+      assert(false, '认证失败');
     }
   },
 
@@ -27,7 +26,7 @@ const auth = {
     const info = auth.verifyHeaders(ctx);
     const { role } = info;
 
-    if (role !== 'root' && role !== 'admin') throw new ApiError('只有管理员才能查看用户！');
+    assert(role === 'general', '只有管理员才能查看用户');
 
     return info;
   },
