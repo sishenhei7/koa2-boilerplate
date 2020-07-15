@@ -12,7 +12,6 @@ export default () => async (ctx, next) => {
     console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
 
   } else {
-
     let ms;
     const start = new Date();
     initLogPath();

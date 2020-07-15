@@ -50,7 +50,6 @@ export default {
   },
 
   async verify(ctx) {
-    auth.verifyHeaders(ctx);
     ctx.body = '认证成功';
   },
 

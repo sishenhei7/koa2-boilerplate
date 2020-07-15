@@ -17,7 +17,6 @@ export default {
   },
 
   async deleteCategory(ctx) {
-    auth.verifyAdmin(ctx);
     const { id } = ctx.params;
 
     const where = { id };

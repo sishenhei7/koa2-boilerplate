@@ -4,8 +4,6 @@ import auth from '../utils/auth';
 
 export default {
   async getUser(ctx) {
-    auth.verifyAdmin(ctx);
-
     const users = await User.findAll({
       attributes: {
         exclude: ['password'],
@@ -19,7 +17,6 @@ export default {
   },
 
   async deleteUser(ctx) {
-    auth.verifyAdmin(ctx);
     const { id } = ctx.params;
 
     const where = { id };

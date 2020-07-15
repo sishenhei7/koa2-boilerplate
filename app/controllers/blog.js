@@ -95,7 +95,7 @@ export default {
   },
 
   async createBlog(ctx) {
-    const { id: userId } = auth.verifyHeaders(ctx);
+    const userId = ctx.request.user.id;
     const {
       title,
       category,
@@ -127,7 +127,7 @@ export default {
   },
 
   async deleteBlog(ctx) {
-    const { id: userId, role } = auth.verifyHeaders(ctx);
+    const { id: userId, role } = ctx.request.user;
     const { id } = ctx.params;
 
     const where = { id };
@@ -148,7 +148,7 @@ export default {
   async updateBlog(ctx) {
     const { id } = ctx.params;
     const { body } = ctx.request;
-    const { id: userId, role } = auth.verifyHeaders(ctx);
+    const { id: userId, role } = ctx.request.user;
 
     const where = { id };
     const blog = await Blog.findOne({ where });

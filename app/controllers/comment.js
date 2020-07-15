@@ -19,7 +19,7 @@ export default {
     ctx.body = comments;
   },
   async createComment(ctx) {
-    const { id: userId } = auth.verifyHeaders(ctx);
+    const { id: userId } = ctx.request.user;
     const { blogId, content } = ctx.request.body;
 
     assert(blogId, '博客id不能为空');
@@ -34,7 +34,6 @@ export default {
     ctx.body = comment;
   },
   async deleteComment(ctx) {
-    auth.verifyAdmin(ctx);
     const { id } = ctx.params;
 
     const where = { id };

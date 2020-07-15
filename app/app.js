@@ -4,10 +4,10 @@ import cors from '@koa/cors';
 import koaJwt from 'koa-jwt';
 
 import settings from './config/settings';
-import router from './routes';
+import router from './router';
 
 import logger from './middlewares/logger';
-import responseFormatter from './middlewares/responseFormatter';
+import responseFormatter from './middlewares/response_formatter';
 
 const app = new Koa();
 
