@@ -1,4 +1,3 @@
-import assert from 'assert';
 import { Category } from '../models';
 
 export default {
@@ -21,7 +20,10 @@ export default {
     const where = { id };
     const category = await Category.findOne({ where });
 
-    assert(category, '没有此类别');
+    if (!category) {
+      ctx.failToJson(404, '没有此类别');
+      return;
+    }
 
     await category.destroy();
     ctx.okToJson();

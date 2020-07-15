@@ -1,4 +1,3 @@
-import assert from 'assert';
 import { User, Comment } from '../models';
 
 export default {
@@ -21,9 +20,6 @@ export default {
     const { id: userId } = ctx.request.user;
     const { blogId, content } = ctx.request.body;
 
-    assert(blogId, '博客id不能为空');
-    assert(content, '评论内容不能为空');
-
     const comment = await Comment.create({
       content,
       userId,
@@ -38,7 +34,10 @@ export default {
     const where = { id };
     const comment = await Comment.findOne({ where });
 
-    assert(comment, '没有此评论');
+    if (!comment) {
+      ctx.failToJson(404, '没有此评论');
+      return;
+    }
 
     await comment.destroy();
     ctx.okToJson();

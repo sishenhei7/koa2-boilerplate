@@ -1,4 +1,3 @@
-import assert from 'assert';
 import { Tag } from '../models';
 
 export default {
@@ -21,7 +20,10 @@ export default {
     const where = { id };
     const tag = await Tag.findOne({ where });
 
-    assert(tag, '没有此标签');
+    if (!tag) {
+      ctx.failToJson(404, '没有此标签');
+      return;
+    }
 
     await tag.destroy();
     ctx.okToJson();

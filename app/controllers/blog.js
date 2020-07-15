@@ -1,5 +1,4 @@
 import Sequelize from 'sequelize';
-import assert from 'assert';
 import { User, Blog, Category, Tag, Comment } from '../models';
 
 const { Op } = Sequelize;
@@ -102,23 +101,19 @@ export default {
       summary,
       content,
     } = ctx.request.body;
-
-    assert(title, '标题不能为空');
-    assert(category, '类别不能为空');
-    assert(tags, '标签不能为空');
-    assert(summary, '摘要不能为空');
-    assert(content, '内容不能为空');
-
-    const where = { title };
     const defaults = {
       title,
       summary,
       content,
       userId,
     };
+    const where = { title };
     const [newBlog, success] = await Blog.findOrCreate({ where, defaults });
 
-    assert(success, '博客标题已存在');
+    if (success) {
+      ctx.failToJson(422, '博客标题已存在');
+      return;
+    }
 
     await setBlogCategory(newBlog, category);
     await setBlogTags(newBlog, tags);
@@ -132,13 +127,15 @@ export default {
     const where = { id };
     const blog = await Blog.findOne({ where });
 
-    assert(blog, '没有此博客');
-    assert(
-      role === 'general' && blog.userId === userId
-      || role === 'admin'
-      || role === 'root',
-      '只有原作者或管理员才能删除此博客'
-    );
+    if (!blog) {
+      ctx.failToJson(400, '没有此博客');
+      return;
+    }
+
+    if (role === 'general' && blog.userId !== userId) {
+      ctx.failToJson(403, '只有原作者或管理员才能删除此博客');
+      return;
+    }
 
     await blog.destroy();
     ctx.okToJson();
@@ -152,13 +149,15 @@ export default {
     const where = { id };
     const blog = await Blog.findOne({ where });
 
-    assert(blog, '没有此博客');
-    assert(
-      role === 'general' && blog.userId === userId ||
-      role === 'admin' ||
-      role === 'root',
-      '只有原作者或管理员才能修改此博客！'
-    );
+    if (!blog) {
+      ctx.failToJson(400, '没有此博客');
+      return;
+    }
+
+    if (role === 'general' && blog.userId !== userId) {
+      ctx.failToJson(403, '只有原作者或管理员才能修改此博客');
+      return;
+    }
 
     blog.update(body);
 
@@ -185,7 +184,10 @@ export default {
       },
     });
 
-    assert(blog, '没有此博客');
+    if (!blog) {
+      ctx.failToJson(400, '没有此博客');
+      return;
+    }
 
     blog.viewCount += 1;
     blog.save();

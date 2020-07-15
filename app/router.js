@@ -25,7 +25,7 @@ router.delete('/user/:id', adminRequired(), user.deleteUser);
 
 // blog
 router.get('/blog', loginRequired(), blog.getBlog);
-router.post('/blog', loginRequired(), blog.createBlog);
+router.post('/blog', fieldRequired(['title', 'category', 'tags', 'summary', 'content']), loginRequired(), blog.createBlog);
 router.get('/blog/:id', blog.getBlogById);
 router.put('/blog/:id', loginRequired(), blog.updateBlog);
 router.delete('/blog/:id', loginRequired(), blog.deleteBlog);
@@ -36,7 +36,7 @@ router.delete('/category/:id', adminRequired(), category.deleteCategory);
 
 // comment
 router.get('/comment/:id', comment.getComment);
-router.post('/comment', loginRequired(), comment.createComment);
+router.post('/comment', fieldRequired(['blogId', 'commentContent']), loginRequired(), comment.createComment);
 router.delete('/comment/:id', adminRequired(), comment.deleteComment);
 
 // tag
