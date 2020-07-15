@@ -1,4 +1,4 @@
-export default {
+const settings = {
   port: 3000,
   db: {
     name: 'koa',
@@ -17,4 +17,6 @@ export default {
       /^\/api/,
     ],
   },
-};
+}
+
+export default settings

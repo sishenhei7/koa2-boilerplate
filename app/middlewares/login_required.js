@@ -1,13 +1,15 @@
-import auth from '../services/auth';
+import auth from '../services/auth'
 
-export default () => async (ctx, next) => {
-  const user = auth.getUserInfo(ctx);
+const loginRequired = () => async (ctx, next) => {
+  const user = auth.getUserInfo(ctx)
 
   if (!user) {
-    ctx.failToJson(401, '您没有登录');
-    return;
+    ctx.failToJson(401, '您没有登录')
+    return
   }
 
-  ctx.request.user = user;
-  await next();
+  ctx.request.user = user
+  await next()
 }
+
+export default loginRequired

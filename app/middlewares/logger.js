@@ -1,31 +1,31 @@
-import { initLogPath, logUtil } from '../utils/logger';
+import { initLogPath, logUtil } from '../utils/logger'
 
 /**
  * 打印请求日志
  */
-export default () => async (ctx, next) => {
-  if (process.env.NODE_ENV !== 'production') {
-
-    const start = new Date();
-    await next();
-    const ms = new Date() - start;
-    console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
-
-  } else {
-    let ms;
-    const start = new Date();
-    initLogPath();
+const logger = () => async (ctx, next) => {
+  if (process.env.NODE_ENV === 'production') {
+    let ms
+    const start = new Date()
+    initLogPath()
 
     try {
-      await next();
-      ms = new Date() - start;
-      logUtil.logResponse(ctx, ms);
-    } catch (err) {
-      ms = new Date() - start;
-      logUtil.logError(ctx, err, ms);
+      await next()
+      ms = new Date() - start
+      logUtil.logResponse(ctx, ms)
+    } catch (error) {
+      ms = new Date() - start
+      logUtil.logError(ctx, error, ms)
 
       // 继续抛错误
-      throw (err);
+      throw error
     }
+  } else {
+    const start = new Date()
+    await next()
+    const ms = new Date() - start
+    console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
   }
 }
+
+export default logger

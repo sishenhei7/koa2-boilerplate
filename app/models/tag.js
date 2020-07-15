@@ -1,24 +1,27 @@
-import Sequelize from 'sequelize';
-import sequelize from '../db';
+import Sequelize from 'sequelize'
+import sequelize from '../db'
 
-const { Model } = Sequelize;
+const { Model } = Sequelize
 
 class Tag extends Model {}
 
-Tag.init({
-  id: {
-    type: Sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
+Tag.init(
+  {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    name: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      field: 'name',
+    },
   },
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    field: 'name',
-  },
-}, {
-  sequelize,
-  modelName: 'tag',
-});
+  {
+    sequelize,
+    modelName: 'tag',
+  }
+)
 
-export default Tag;
+export default Tag

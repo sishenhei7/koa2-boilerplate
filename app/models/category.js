@@ -1,24 +1,27 @@
-import Sequelize from 'sequelize';
-import sequelize from '../db';
+import Sequelize from 'sequelize'
+import sequelize from '../db'
 
-const { Model } = Sequelize;
+const { Model } = Sequelize
 
 class Category extends Model {}
 
-Category.init({
-  id: {
-    type: Sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
+Category.init(
+  {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    name: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      field: 'name',
+    },
   },
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    field: 'name',
-  },
-}, {
-  sequelize,
-  modelName: 'category',
-});
+  {
+    sequelize,
+    modelName: 'category',
+  }
+)
 
-export default Category;
+export default Category
