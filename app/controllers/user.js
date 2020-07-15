@@ -1,6 +1,5 @@
 import assert from 'assert';
 import { User, Blog, Comment } from '../models';
-import auth from '../utils/auth';
 
 export default {
   async getUser(ctx) {
@@ -13,7 +12,7 @@ export default {
       ],
     });
 
-    ctx.body = users;
+    ctx.okToJson({ users });
   },
 
   async deleteUser(ctx) {
@@ -27,6 +26,6 @@ export default {
     await Blog.destroy({ where: { userId: id } });
     await Comment.destroy({ where: { userId: id } });
     await user.destroy();
-    ctx.body = '';
+    ctx.okToJson();
   },
 };

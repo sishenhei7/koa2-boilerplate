@@ -7,6 +7,7 @@ import settings from './config/settings';
 import router from './router';
 
 import logger from './middlewares/logger';
+import jsonify from './middlewares/jsonify';
 import responseFormatter from './middlewares/response_formatter';
 
 const app = new Koa();
@@ -39,6 +40,9 @@ app.use(koaJwt({
 }).unless({
   path: settings.jwt.ignoredPath,
 }));
+
+// 加上 jsonify 方法
+app.use(jsonify());
 
 // body解析
 app.use(bodyparser({

@@ -1,15 +1,10 @@
 import bcrypt from 'bcrypt';
-import assert from 'assert';
-import auth from '../utils/auth';
+import auth from '../services/auth';
 import { User } from '../models';
 
 export default {
   async register(ctx) {
     const { username, password } = ctx.request.body;
-
-    assert(username, '用户名不能为空');
-    assert(password, '密码不能为空');
-
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.findOrCreate({
       where: {
@@ -21,44 +16,45 @@ export default {
       },
     });
 
-    assert(newUser[1], '用户已存在');
+    if (newUser[1]) {
+      ctx.failToJson(422, '用户已存在');
+      return;
+    }
 
     const token = auth.sign(newUser[0]);
-    ctx.body = token;
+    ctx.okToJson({ token });
   },
 
   async login(ctx) {
     const { username, password } = ctx.request.body;
-
-    assert(username, '用户名不能为空');
-    assert(password, '密码不能为空');
-
     const user = await User.findOne({
       where: {
         username,
       },
     });
 
-    assert(user, '用户不存在');
+    if (!user) {
+      ctx.failToJson(404, '用户不存在');
+      return;
+    }
 
     const isUserValid = bcrypt.compare(password, user.password);
 
-    assert(isUserValid, '用户密码错误');
+    if (!isUserValid) {
+      ctx.failToJson(422, '密码错误');
+      return;
+    }
 
     const token = auth.sign(user);
-    ctx.body = token;
+    ctx.okToJson({ token });
   },
 
   async verify(ctx) {
-    ctx.body = '认证成功';
+    ctx.okToJson();
   },
 
   async registerAdmin(ctx) {
     const { username, password } = ctx.request.body;
-
-    assert(username, '用户名不能为空');
-    assert(password, '密码不能为空');
-
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.findOrCreate({
       where: {
@@ -71,18 +67,17 @@ export default {
       },
     });
 
-    assert(newUser[1], '用户已存在');
+    if (newUser[1]) {
+      ctx.failToJson(422, '用户已存在');
+      return;
+    }
 
     const token = auth.sign(newUser[0]);
-    ctx.body = token;
+    ctx.okToJson({ token });
   },
 
   async registerRoot(ctx) {
     const { username, password } = ctx.request.body;
-
-    assert(username, '用户名不能为空');
-    assert(password, '密码不能为空');
-
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.findOrCreate({
       where: {
@@ -95,9 +90,12 @@ export default {
       },
     });
 
-    assert(newUser[1], '用户已存在');
+    if (newUser[1]) {
+      ctx.failToJson(422, '用户已存在');
+      return;
+    }
 
     const token = auth.sign(newUser[0]);
-    ctx.body = token;
+    ctx.okToJson({ token });
   },
 };

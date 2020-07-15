@@ -12,7 +12,7 @@ export default {
       },
     });
 
-    ctx.body = tags;
+    ctx.okToJson({ tags });
   },
 
   async deleteTag(ctx) {
@@ -24,6 +24,6 @@ export default {
     assert(tag, '没有此标签');
 
     await tag.destroy();
-    ctx.body = '';
+    ctx.okToJson();
   },
 };

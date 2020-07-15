@@ -1,5 +1,4 @@
 import assert from 'assert';
-import auth from '../utils/auth';
 import { User, Comment } from '../models';
 
 export default {
@@ -16,7 +15,7 @@ export default {
       }],
     });
 
-    ctx.body = comments;
+    ctx.okToJson({ comments });
   },
   async createComment(ctx) {
     const { id: userId } = ctx.request.user;
@@ -31,7 +30,7 @@ export default {
       blogId,
     });
 
-    ctx.body = comment;
+    ctx.okToJson({ comments });
   },
   async deleteComment(ctx) {
     const { id } = ctx.params;
@@ -42,6 +41,6 @@ export default {
     assert(comment, '没有此评论');
 
     await comment.destroy();
-    ctx.body = '';
+    ctx.okToJson();
   },
 };

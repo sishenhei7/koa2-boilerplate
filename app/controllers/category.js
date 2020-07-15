@@ -1,6 +1,5 @@
 import assert from 'assert';
 import { Category } from '../models';
-import auth from '../utils/auth';
 
 export default {
   async getCategory(ctx) {
@@ -13,7 +12,7 @@ export default {
       },
     });
 
-    ctx.body = categories;
+    ctx.okToJson({ categories });
   },
 
   async deleteCategory(ctx) {
@@ -25,6 +24,6 @@ export default {
     assert(category, '没有此类别');
 
     await category.destroy();
-    ctx.body = '';
+    ctx.okToJson();
   },
 };

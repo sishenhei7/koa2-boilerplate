@@ -1,6 +1,5 @@
 import Sequelize from 'sequelize';
 import assert from 'assert';
-import auth from '../utils/auth';
 import { User, Blog, Category, Tag, Comment } from '../models';
 
 const { Op } = Sequelize;
@@ -91,7 +90,7 @@ export default {
       ],
     });
 
-    ctx.body = { count, data };
+    ctx.okToJson({ count, data });
   },
 
   async createBlog(ctx) {
@@ -123,7 +122,7 @@ export default {
 
     await setBlogCategory(newBlog, category);
     await setBlogTags(newBlog, tags);
-    ctx.body = '';
+    ctx.okToJson();
   },
 
   async deleteBlog(ctx) {
@@ -142,7 +141,7 @@ export default {
     );
 
     await blog.destroy();
-    ctx.body = '';
+    ctx.okToJson();
   },
 
   async updateBlog(ctx) {
@@ -173,7 +172,7 @@ export default {
       await setBlogTags(blog, body.tags);
     }
 
-    ctx.body = '';
+    ctx.okToJson();
   },
 
   async getBlogById(ctx) {
@@ -190,6 +189,6 @@ export default {
 
     blog.viewCount += 1;
     blog.save();
-    ctx.body = blog;
+    ctx.okToJson({ blog });
   },
 };
