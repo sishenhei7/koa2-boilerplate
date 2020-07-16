@@ -43,7 +43,7 @@ router.delete('/category/:id', adminRequired(), category.deleteCategory)
 router.get('/comment/:id', comment.getComment)
 router.post(
   '/comment',
-  fieldRequired(['blogId', 'commentContent']),
+  fieldRequired(['blogId', 'content']),
   loginRequired(),
   comment.createComment
 )
