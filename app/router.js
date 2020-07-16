@@ -24,7 +24,7 @@ router.get('/user', adminRequired(), user.getUser)
 router.delete('/user/:id', adminRequired(), user.deleteUser)
 
 // blog
-router.get('/blog', loginRequired(), blog.getBlog)
+router.get('/blog', blog.getBlog)
 router.post(
   '/blog',
   fieldRequired(['title', 'category', 'tags', 'summary', 'content']),

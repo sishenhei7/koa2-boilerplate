@@ -8,12 +8,12 @@ import router from './router'
 
 import logger from './middlewares/logger'
 import jsonify from './middlewares/jsonify'
-import responseFormatter from './middlewares/response_formatter'
+import errorHandler from './middlewares/error_handler'
 
 const app = new Koa()
 
-// 全局响应处理
-app.use(responseFormatter('^/api'))
+// 错误处理
+app.use(errorHandler('^/api'))
 
 // 记录日志
 app.use(logger())
