@@ -89,7 +89,7 @@ class BlogController {
       order: [['id']],
     })
 
-    ctx.okToJson({ count, data })
+    ctx.toJson({ count, data })
   }
 
   async createBlog(ctx) {
@@ -102,16 +102,13 @@ class BlogController {
       userId,
     }
     const where = { title }
-    const [newBlog, success] = await Blog.findOrCreate({ where, defaults })
+    const [newBlog, isExist] = await Blog.findOrCreate({ where, defaults })
 
-    if (success) {
-      ctx.failToJson(422, '博客标题已存在')
-      return
-    }
+    if (isExist) ctx.throw(422, '用户已存在')
 
     await setBlogCategory(newBlog, category)
     await setBlogTags(newBlog, tags)
-    ctx.okToJson()
+    ctx.toJson()
   }
 
   async deleteBlog(ctx) {
@@ -121,18 +118,12 @@ class BlogController {
     const where = { id }
     const blog = await Blog.findOne({ where })
 
-    if (!blog) {
-      ctx.failToJson(400, '没有此博客')
-      return
-    }
+    if (!blog) ctx.throw(400, '没有此博客')
 
-    if (role === 'general' && blog.userId !== userId) {
-      ctx.failToJson(403, '只有原作者或管理员才能删除此博客')
-      return
-    }
+    if (role === 'general' && blog.userId !== userId) ctx.throw(403, '只有原作者或管理员才能删除此博客')
 
     await blog.destroy()
-    ctx.okToJson()
+    ctx.toJson()
   }
 
   async updateBlog(ctx) {
@@ -143,15 +134,9 @@ class BlogController {
     const where = { id }
     const blog = await Blog.findOne({ where })
 
-    if (!blog) {
-      ctx.failToJson(400, '没有此博客')
-      return
-    }
+    if (!blog) ctx.throw(400, '没有此博客')
 
-    if (role === 'general' && blog.userId !== userId) {
-      ctx.failToJson(403, '只有原作者或管理员才能修改此博客')
-      return
-    }
+    if (role === 'general' && blog.userId !== userId) ctx.throw(403, '只有原作者或管理员才能修改此博客')
 
     blog.update(body)
 
@@ -165,7 +150,7 @@ class BlogController {
       await setBlogTags(blog, body.tags)
     }
 
-    ctx.okToJson()
+    ctx.toJson()
   }
 
   async getBlogById(ctx) {
@@ -178,14 +163,11 @@ class BlogController {
       },
     })
 
-    if (!blog) {
-      ctx.failToJson(400, '没有此博客')
-      return
-    }
+    if (!blog) ctx.throw(400, '没有此博客')
 
     blog.viewCount += 1
     blog.save()
-    ctx.okToJson({ blog })
+    ctx.toJson({ blog })
   }
 }
 

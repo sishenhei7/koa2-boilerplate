@@ -16,7 +16,7 @@ class CommentController {
       ],
     })
 
-    ctx.okToJson({ comments })
+    ctx.toJson({ comments })
   }
 
   async createComment(ctx) {
@@ -29,7 +29,7 @@ class CommentController {
       blogId,
     })
 
-    ctx.okToJson({ comment })
+    ctx.toJson({ comment })
   }
 
   async deleteComment(ctx) {
@@ -37,13 +37,10 @@ class CommentController {
     const where = { id }
     const comment = await Comment.findOne({ where })
 
-    if (!comment) {
-      ctx.failToJson(404, '没有此评论')
-      return
-    }
+    if (!comment) ctx.throw(404, '没有此评论')
 
     await comment.destroy()
-    ctx.okToJson()
+    ctx.toJson()
   }
 }
 

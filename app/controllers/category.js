@@ -9,7 +9,7 @@ class CategoryController {
       },
     })
 
-    ctx.okToJson({ categories })
+    ctx.toJson({ categories })
   }
 
   async deleteCategory(ctx) {
@@ -18,13 +18,10 @@ class CategoryController {
     const where = { id }
     const category = await Category.findOne({ where })
 
-    if (!category) {
-      ctx.failToJson(404, '没有此类别')
-      return
-    }
+    if (!category) ctx.throw(400, '没有此类别')
 
     await category.destroy()
-    ctx.okToJson()
+    ctx.toJson()
   }
 }
 

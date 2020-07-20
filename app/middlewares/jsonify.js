@@ -1,23 +1,15 @@
 const jsonify = () => async (ctx, next) => {
-  if (ctx.okToJson || ctx.failToJson) {
+  if (ctx.toJson) {
     await next()
     return
   }
 
-  ctx.response.okToJson = ctx.okToJson = (data) => {
+  ctx.response.toJson = ctx.toJson = (data) => {
     ctx.status = 200
     ctx.body = {
       ok: true,
       message: 'success',
       data: data || {},
-    }
-  }
-
-  ctx.response.failToJson = ctx.failToJson = (status, message) => {
-    ctx.status = status || 500
-    ctx.body = {
-      ok: false,
-      message,
     }
   }
 

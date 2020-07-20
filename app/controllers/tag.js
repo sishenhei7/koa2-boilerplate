@@ -9,7 +9,7 @@ class TagController {
       },
     })
 
-    ctx.okToJson({ tags })
+    ctx.toJson({ tags })
   }
 
   async deleteTag(ctx) {
@@ -18,13 +18,10 @@ class TagController {
     const where = { id }
     const tag = await Tag.findOne({ where })
 
-    if (!tag) {
-      ctx.failToJson(404, '没有此标签')
-      return
-    }
+    if (!tag) ctx.throw(404, '没有此标签')
 
     await tag.destroy()
-    ctx.okToJson()
+    ctx.toJson()
   }
 }
 

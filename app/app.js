@@ -12,11 +12,11 @@ import errorHandler from './middlewares/error_handler'
 
 const app = new Koa()
 
+// 全局错误处理
+app.use(errorHandler('^/api'))
+
 // 加上全局方法： jsonify
 app.use(jsonify())
-
-// 错误处理
-app.use(errorHandler('^/api'))
 
 // 记录日志
 app.use(logger())

@@ -6,78 +6,63 @@ class AuthController {
   async register(ctx) {
     const { username, password } = ctx.request.body
     const hashedPassword = await bcrypt.hash(password, 10)
-    const result = await services.user.getOrCreate({
+    const [newUser, isExist] = await services.user.getOrCreate({
       username,
       password: hashedPassword,
     });
 
-    if (result[1]) {
-      ctx.failToJson(422, '用户已存在')
-      return
-    }
+    if (isExist) ctx.throw(422, '用户已存在')
 
-    const token = auth.sign(result[0])
-    ctx.okToJson({ token })
+    const token = auth.sign(newUser)
+    ctx.toJson({ token })
   }
 
   async login(ctx) {
     const { username, password } = ctx.request.body
     const user = services.user.getUserByUsername(username)
 
-    if (!user) {
-      ctx.failToJson(404, '用户不存在')
-      return
-    }
+    if (!user) ctx.throw(422, '用户已存在')
 
     const isUserValid = bcrypt.compare(password, user.password)
 
-    if (!isUserValid) {
-      ctx.failToJson(422, '密码错误')
-      return
-    }
+    if (!isUserValid) ctx.throw(422, '密码错误')
 
     const token = auth.sign(user)
-    ctx.okToJson({ token })
+    ctx.toJson({ token })
   }
 
   async verify(ctx) {
-    ctx.okToJson()
+    ctx.toJson()
   }
 
   async registerAdmin(ctx) {
     const { username, password } = ctx.request.body
     const hashedPassword = await bcrypt.hash(password, 10)
-    const result = await services.user.getOrCreate({
+    const [newUser, isExist] = await services.user.getOrCreate({
       username,
       password: hashedPassword,
       role: 'admin',
     });
 
-    if (result[1]) {
-      ctx.failToJson(422, '用户已存在')
-      return
-    }
+    if (isExist) ctx.throw(422, '用户已存在')
 
-    const token = auth.sign(result[0])
-    ctx.okToJson({ token })
+    const token = auth.sign(newUser)
+    ctx.toJson({ token })
   }
 
   async registerRoot(ctx) {
     const { username, password } = ctx.request.body
     const hashedPassword = await bcrypt.hash(password, 10)
-    const result = await services.user.getOrCreate({
+    const [newUser, isExist] = await services.user.getOrCreate({
       username,
       password: hashedPassword,
       role: 'root',
     });
 
-    if (result[1]) {
-      ctx.failToJson(422, '用户已存在')
-      return
-    }
+    if (isExist) ctx.throw(422, '用户已存在')
 
-    const token = auth.sign(result[0])
-    ctx.okToJson({ token })
+    const token = auth.sign(newUser)
+    ctx.toJson({ token })
   }
 }
 
