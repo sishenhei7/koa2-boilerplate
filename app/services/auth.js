@@ -5,14 +5,14 @@ const {
   jwt: { secret, expiresIn },
 } = settings
 
-const auth = {
-  sign: (user) => {
+class AuthService {
+  sign(user) {
     const { id, username, role } = user
     const token = jwt.sign({ id, username, role }, secret, { expiresIn })
     return token
-  },
+  }
 
-  getUserInfo: (ctx) => {
+  getUserInfo(ctx) {
     let user = {}
 
     try {
@@ -24,7 +24,7 @@ const auth = {
     }
 
     return user
-  },
+  }
 }
 
-export default auth
+export default new AuthService()

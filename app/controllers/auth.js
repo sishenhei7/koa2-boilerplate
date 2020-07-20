@@ -1,37 +1,28 @@
 import bcrypt from 'bcrypt'
 import auth from '../services/auth'
-import { User } from '../models'
+import services from '../services'
 
 class AuthController {
   async register(ctx) {
     const { username, password } = ctx.request.body
     const hashedPassword = await bcrypt.hash(password, 10)
-    const newUser = await User.findOrCreate({
-      where: {
-        username,
-      },
-      defaults: {
-        username,
-        password: hashedPassword,
-      },
-    })
+    const result = await services.user.getOrCreate({
+      username,
+      password: hashedPassword,
+    });
 
-    if (newUser[1]) {
+    if (result[1]) {
       ctx.failToJson(422, '用户已存在')
       return
     }
 
-    const token = auth.sign(newUser[0])
+    const token = auth.sign(result[0])
     ctx.okToJson({ token })
   }
 
   async login(ctx) {
     const { username, password } = ctx.request.body
-    const user = await User.findOne({
-      where: {
-        username,
-      },
-    })
+    const user = services.user.getUserByUsername(username)
 
     if (!user) {
       ctx.failToJson(404, '用户不存在')
@@ -56,46 +47,36 @@ class AuthController {
   async registerAdmin(ctx) {
     const { username, password } = ctx.request.body
     const hashedPassword = await bcrypt.hash(password, 10)
-    const newUser = await User.findOrCreate({
-      where: {
-        username,
-      },
-      defaults: {
-        username,
-        password: hashedPassword,
-        role: 'admin',
-      },
-    })
+    const result = await services.user.getOrCreate({
+      username,
+      password: hashedPassword,
+      role: 'admin',
+    });
 
-    if (newUser[1]) {
+    if (result[1]) {
       ctx.failToJson(422, '用户已存在')
       return
     }
 
-    const token = auth.sign(newUser[0])
+    const token = auth.sign(result[0])
     ctx.okToJson({ token })
   }
 
   async registerRoot(ctx) {
     const { username, password } = ctx.request.body
     const hashedPassword = await bcrypt.hash(password, 10)
-    const newUser = await User.findOrCreate({
-      where: {
-        username,
-      },
-      defaults: {
-        username,
-        password: hashedPassword,
-        role: 'root',
-      },
-    })
+    const result = await services.user.getOrCreate({
+      username,
+      password: hashedPassword,
+      role: 'root',
+    });
 
-    if (newUser[1]) {
+    if (result[1]) {
       ctx.failToJson(422, '用户已存在')
       return
     }
 
-    const token = auth.sign(newUser[0])
+    const token = auth.sign(result[0])
     ctx.okToJson({ token })
   }
 }
