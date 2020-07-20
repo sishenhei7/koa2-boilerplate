@@ -12,6 +12,9 @@ import errorHandler from './middlewares/error_handler'
 
 const app = new Koa()
 
+// 加上 jsonify 方法
+app.use(jsonify())
+
 // 错误处理
 app.use(errorHandler('^/api'))
 
@@ -42,9 +45,6 @@ app.use(
     path: settings.jwt.ignoredPath,
   })
 )
-
-// 加上 jsonify 方法
-app.use(jsonify())
 
 // body解析
 app.use(
