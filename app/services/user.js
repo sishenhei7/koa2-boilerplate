@@ -1,7 +1,7 @@
 const { User, Blog, Comment } = require('../models')
 
 class UserService {
-  async getAllUsers() {
+  getAllUsers() {
     // 不要显示密码
     const condition = {
       attributes: {
@@ -10,36 +10,34 @@ class UserService {
       order: [['id']],
     }
 
-    const user = await User.findAll(condition)
-    return user
+    return User.findAll(condition)
   }
 
-  async getUserById(id) {
+  getUserById(id) {
     const condition = {
       where: { id },
     }
 
-    const user = await User.findOne(condition)
-    return user
+    return User.findOne(condition)
   }
 
-  async getUserByUsername(username) {
+  getUserByUsername(username) {
     const condition = {
       where: { username },
     }
 
-    const user = await User.findOne(condition)
-    return user
+    return User.findOne(condition)
   }
 
-  async getOrCreate(user) {
-    const newUser = await User.findOrCreate({
+  getOrCreate(user) {
+    const condition = {
       where: {
         username: user.username,
       },
       defaults: user,
-    })
-    return newUser
+    }
+
+    return User.findOrCreate(condition)
   }
 
   async deleteBlogById(id) {
