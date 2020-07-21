@@ -7,7 +7,7 @@ class UserService {
       attributes: {
         exclude: ['password'],
       },
-      order: [['id']]
+      order: [['id']],
     }
 
     return await User.findAll(condition)
@@ -15,7 +15,7 @@ class UserService {
 
   async getUserById(id) {
     const condition = {
-      where: { id }
+      where: { id },
     }
 
     return await User.findOne(condition)
@@ -23,7 +23,7 @@ class UserService {
 
   async getUserByUsername(username) {
     const condition = {
-      where: { username }
+      where: { username },
     }
 
     return await User.findOne(condition)
@@ -35,7 +35,7 @@ class UserService {
         username: user.username,
       },
       defaults: user,
-    });
+    })
   }
 
   async deleteBlogById(id) {

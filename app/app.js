@@ -1,9 +1,9 @@
 import Koa from 'koa'
 import bodyparser from 'koa-bodyparser'
 import cors from '@koa/cors'
-import koaJwt from 'koa-jwt'
+// import koaJwt from 'koa-jwt'
 
-import settings from './config/settings'
+// import settings from './config/settings'
 import router from './router'
 
 import logger from './middlewares/logger'
@@ -31,14 +31,14 @@ app.use(
   })
 )
 
-// 设置 jwt
-app.use(
-  koaJwt({
-    secret: settings.jwt.secret,
-  }).unless({
-    path: settings.jwt.ignoredPath,
-  })
-)
+// // 设置 jwt
+// app.use(
+//   koaJwt({
+//     secret: settings.jwt.secret,
+//   }).unless({
+//     path: settings.jwt.ignoredPath,
+//   })
+// )
 
 // 设置Header
 app.use(async (ctx, next) => {

@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt'
-import auth from '../services/auth'
 import services from '../services'
 
 class AuthController {
@@ -9,11 +8,11 @@ class AuthController {
     const [newUser, isExist] = await services.user.getOrCreate({
       username,
       password: hashedPassword,
-    });
+    })
 
     if (isExist) ctx.throw(422, '用户已存在')
 
-    const token = auth.sign(newUser)
+    const token = services.auth.sign(newUser)
     ctx.toJson({ token })
   }
 
@@ -27,7 +26,7 @@ class AuthController {
 
     if (!isUserValid) ctx.throw(422, '密码错误')
 
-    const token = auth.sign(user)
+    const token = services.auth.sign(user)
     ctx.toJson({ token })
   }
 
@@ -36,17 +35,18 @@ class AuthController {
   }
 
   async registerAdmin(ctx) {
+    console.log('services', services)
     const { username, password } = ctx.request.body
     const hashedPassword = await bcrypt.hash(password, 10)
     const [newUser, isExist] = await services.user.getOrCreate({
       username,
       password: hashedPassword,
       role: 'admin',
-    });
+    })
 
     if (isExist) ctx.throw(422, '用户已存在')
 
-    const token = auth.sign(newUser)
+    const token = services.auth.sign(newUser)
     ctx.toJson({ token })
   }
 
@@ -57,11 +57,11 @@ class AuthController {
       username,
       password: hashedPassword,
       role: 'root',
-    });
+    })
 
     if (isExist) ctx.throw(422, '用户已存在')
 
-    const token = auth.sign(newUser)
+    const token = services.auth.sign(newUser)
     ctx.toJson({ token })
   }
 }

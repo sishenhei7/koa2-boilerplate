@@ -120,7 +120,8 @@ class BlogController {
 
     if (!blog) ctx.throw(400, '没有此博客')
 
-    if (role === 'general' && blog.userId !== userId) ctx.throw(403, '只有原作者或管理员才能删除此博客')
+    if (role === 'general' && blog.userId !== userId)
+      ctx.throw(403, '只有原作者或管理员才能删除此博客')
 
     await blog.destroy()
     ctx.toJson()
@@ -136,7 +137,8 @@ class BlogController {
 
     if (!blog) ctx.throw(400, '没有此博客')
 
-    if (role === 'general' && blog.userId !== userId) ctx.throw(403, '只有原作者或管理员才能修改此博客')
+    if (role === 'general' && blog.userId !== userId)
+      ctx.throw(403, '只有原作者或管理员才能修改此博客')
 
     blog.update(body)
 

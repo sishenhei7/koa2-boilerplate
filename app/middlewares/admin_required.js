@@ -1,7 +1,7 @@
-import auth from '../services/auth'
+import services from '../services'
 
 const adminRequired = () => async (ctx, next) => {
-  const user = auth.getUserInfo(ctx)
+  const user = services.auth.getUserInfo(ctx)
 
   if (!user) ctx.throw(401, '您没有登录')
 
