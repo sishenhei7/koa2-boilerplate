@@ -1,4 +1,4 @@
-import { User, Comment } from '../models'
+const { User, Comment } = require('../models')
 
 class CommentController {
   async getComment(ctx) {
@@ -44,4 +44,4 @@ class CommentController {
   }
 }
 
-export default new CommentController()
+module.exports = new CommentController()

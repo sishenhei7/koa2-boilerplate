@@ -1,4 +1,4 @@
-import { User, Blog, Comment } from '../models'
+const { User, Blog, Comment } = require('../models')
 
 class UserService {
   async getAllUsers() {
@@ -10,7 +10,8 @@ class UserService {
       order: [['id']],
     }
 
-    return await User.findAll(condition)
+    const user = await User.findAll(condition)
+    return user
   }
 
   async getUserById(id) {
@@ -18,7 +19,8 @@ class UserService {
       where: { id },
     }
 
-    return await User.findOne(condition)
+    const user = await User.findOne(condition)
+    return user
   }
 
   async getUserByUsername(username) {
@@ -26,16 +28,18 @@ class UserService {
       where: { username },
     }
 
-    return await User.findOne(condition)
+    const user = await User.findOne(condition)
+    return user
   }
 
   async getOrCreate(user) {
-    return await User.findOrCreate({
+    const newUser = await User.findOrCreate({
       where: {
         username: user.username,
       },
       defaults: user,
     })
+    return newUser
   }
 
   async deleteBlogById(id) {
@@ -45,4 +49,4 @@ class UserService {
   }
 }
 
-export default new UserService()
+module.exports = new UserService()

@@ -1,7 +1,5 @@
-import Sequelize from 'sequelize'
-import settings from './config/settings'
-
-const { db } = settings
+const Sequelize = require('sequelize')
+const { db } = require('./config/settings')
 
 const sequelize = new Sequelize(db.name, db.username, db.password, {
   host: db.host,
@@ -43,4 +41,4 @@ sequelize.sync({
   alter: false, // 调试的时候可以开启这里
 })
 
-export default sequelize
+module.exports = sequelize

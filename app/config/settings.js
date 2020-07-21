@@ -1,4 +1,4 @@
-const settings = {
+module.exports = {
   port: 3000,
   db: {
     name: 'koa',
@@ -18,5 +18,3 @@ const settings = {
     ],
   },
 }
-
-export default settings

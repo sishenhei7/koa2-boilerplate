@@ -1,4 +1,4 @@
-const jsonify = () => async (ctx, next) => {
+module.exports = () => async (ctx, next) => {
   if (ctx.toJson) {
     await next()
     return
@@ -15,5 +15,3 @@ const jsonify = () => async (ctx, next) => {
 
   await next()
 }
-
-export default jsonify

@@ -1,7 +1,3 @@
-export function isUndef(v) {
-  return v === undefined || v === null
-}
+exports.isUndef = (v) => v === undefined || v === null
 
-export function isDef(v) {
-  return v !== undefined && v !== null
-}
+exports.isDef = (v) => v !== undefined && v !== null

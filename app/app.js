@@ -1,14 +1,10 @@
-import Koa from 'koa'
-import bodyparser from 'koa-bodyparser'
-import cors from '@koa/cors'
-// import koaJwt from 'koa-jwt'
-
-// import settings from './config/settings'
-import router from './router'
-
-import logger from './middlewares/logger'
-import jsonify from './middlewares/jsonify'
-import errorHandler from './middlewares/error_handler'
+const Koa = require('Koa')
+const bodyparser = require('koa-bodyparser')
+const cors = require('@koa/cors')
+const router = require('./router')
+const logger = require('./middlewares/logger')
+const jsonify = require('./middlewares/jsonify')
+const errorHandler = require('./middlewares/error_handler')
 
 const app = new Koa()
 
@@ -31,15 +27,6 @@ app.use(
   })
 )
 
-// // 设置 jwt
-// app.use(
-//   koaJwt({
-//     secret: settings.jwt.secret,
-//   }).unless({
-//     path: settings.jwt.ignoredPath,
-//   })
-// )
-
 // 设置Header
 app.use(async (ctx, next) => {
   await next()
@@ -58,4 +45,4 @@ app.use(
 app.use(router.routes())
 app.use(router.allowedMethods())
 
-export default app
+module.exports = app

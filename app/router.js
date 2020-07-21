@@ -1,13 +1,13 @@
-import Router from '@koa/router'
-import auth from './controllers/auth'
-import user from './controllers/user'
-import blog from './controllers/blog'
-import category from './controllers/category'
-import comment from './controllers/comment'
-import tag from './controllers/tag'
-import loginRequired from './middlewares/login_required'
-import adminRequired from './middlewares/admin_required'
-import fieldRequired from './middlewares/field_required'
+const Router = require('@koa/router')
+const auth = require('./controllers/auth')
+const user = require('./controllers/user')
+const blog = require('./controllers/blog')
+const category = require('./controllers/category')
+const comment = require('./controllers/comment')
+const tag = require('./controllers/tag')
+const loginRequired = require('./middlewares/login_required')
+const adminRequired = require('./middlewares/admin_required')
+const fieldRequired = require('./middlewares/field_required')
 
 const router = new Router()
 router.prefix('/api')
@@ -52,4 +52,4 @@ router.delete('/comment/:id', adminRequired(), comment.deleteComment)
 // tag
 router.get('/tag', adminRequired(), tag.getTag)
 
-export default router
+module.exports = router

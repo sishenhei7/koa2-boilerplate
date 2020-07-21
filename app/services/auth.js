@@ -1,9 +1,6 @@
-import jwt from 'jsonwebtoken'
-import settings from '../config/settings'
-
-const {
-  jwt: { secret, expiresIn },
-} = settings
+const jwt = require('jsonwebtoken')
+const settings = require('../config/settings')
+const { secret, expiresIn } = settings.jwt
 
 class AuthService {
   sign(user) {
@@ -27,4 +24,4 @@ class AuthService {
   }
 }
 
-export default new AuthService()
+module.exports = new AuthService()

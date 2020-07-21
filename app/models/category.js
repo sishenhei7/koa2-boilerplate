@@ -1,5 +1,5 @@
-import Sequelize from 'sequelize'
-import sequelize from '../db'
+const Sequelize = require('sequelize')
+const sequelize = require('../db')
 
 const { Model } = Sequelize
 
@@ -24,4 +24,4 @@ Category.init(
   }
 )
 
-export default Category
+module.exports = Category

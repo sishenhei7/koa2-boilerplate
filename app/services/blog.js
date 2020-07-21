@@ -1,3 +1,3 @@
 class BlogService {}
 
-export default new BlogService()
+module.exports = new BlogService()

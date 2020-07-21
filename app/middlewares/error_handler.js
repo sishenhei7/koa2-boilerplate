@@ -1,7 +1,7 @@
 /**
  * 在app.use(router)之前调用
  */
-const responseHandler = () => async (ctx, next) => {
+module.exports = () => async (ctx, next) => {
   await next().catch((error) => {
     // 非生产环境打印错误便于调试
     if (process.env.NODE_ENV !== 'production') {
@@ -15,5 +15,3 @@ const responseHandler = () => async (ctx, next) => {
     }
   })
 }
-
-export default responseHandler

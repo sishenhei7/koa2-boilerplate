@@ -1,5 +1,5 @@
-import Sequelize from 'sequelize'
-import sequelize from '../db'
+const Sequelize = require('sequelize')
+const sequelize = require('../db')
 
 const { Model } = Sequelize
 
@@ -24,4 +24,4 @@ Tag.init(
   }
 )
 
-export default Tag
+module.exports = Tag

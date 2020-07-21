@@ -1,5 +1,5 @@
-import bcrypt from 'bcrypt'
-import services from '../services'
+const bcrypt = require('bcrypt')
+const services = require('../services')
 
 class AuthController {
   async register(ctx) {
@@ -66,4 +66,4 @@ class AuthController {
   }
 }
 
-export default new AuthController()
+module.exports = new AuthController()

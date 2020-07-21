@@ -1,7 +1,5 @@
-import path from 'path'
-
 // 日志根目录
-const baseLogPath = path.resolve(__dirname, '../../logs')
+const baseLogPath = require('path').resolve(__dirname, '../../logs')
 
 // 错误日志目录
 const errorPath = '/error'
@@ -41,4 +39,4 @@ const logger = {
   },
 }
 
-export default logger
+module.exports = logger

@@ -1,6 +1,6 @@
-import services from '../services'
+const services = require('../services')
 
-const loginRequired = () => async (ctx, next) => {
+module.exports = () => async (ctx, next) => {
   const user = services.auth.getUserInfo(ctx)
 
   if (!user) ctx.throw(401, '您没有登录')
@@ -8,5 +8,3 @@ const loginRequired = () => async (ctx, next) => {
   ctx.request.user = user
   await next()
 }
-
-export default loginRequired

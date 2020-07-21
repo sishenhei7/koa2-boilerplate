@@ -1,4 +1,4 @@
-import { Tag } from '../models'
+const { Tag } = require('../models')
 
 class TagController {
   async getTag(ctx) {
@@ -25,4 +25,4 @@ class TagController {
   }
 }
 
-export default new TagController()
+module.exports = new TagController()

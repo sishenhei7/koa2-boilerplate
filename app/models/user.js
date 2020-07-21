@@ -1,6 +1,6 @@
-import moment from 'moment'
-import Sequelize from 'sequelize'
-import sequelize from '../db'
+const moment = require('moment')
+const Sequelize = require('sequelize')
+const sequelize = require('../db')
 
 const { Model } = Sequelize
 
@@ -50,4 +50,4 @@ User.init(
   }
 )
 
-export default User
+module.exports = User

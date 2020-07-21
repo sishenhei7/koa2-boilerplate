@@ -1,9 +1,9 @@
-import { initLogPath, logUtil } from '../utils/logger'
+const { initLogPath, logUtil } = require('../utils/logger')
 
 /**
  * 打印请求日志
  */
-const logger = () => async (ctx, next) => {
+module.exports = () => async (ctx, next) => {
   if (process.env.NODE_ENV === 'production') {
     let ms
     const start = new Date()
@@ -27,5 +27,3 @@ const logger = () => async (ctx, next) => {
     console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
   }
 }
-
-export default logger

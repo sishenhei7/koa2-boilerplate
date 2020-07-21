@@ -1,4 +1,4 @@
-import services from '../services'
+const services = require('../services')
 
 class UserController {
   async getUser(ctx) {
@@ -16,4 +16,4 @@ class UserController {
   }
 }
 
-export default new UserController()
+module.exports = new UserController()

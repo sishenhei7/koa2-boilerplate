@@ -1,5 +1,5 @@
-import Sequelize from 'sequelize'
-import { User, Blog, Category, Tag, Comment } from '../models'
+const Sequelize = require('Sequelize')
+const { User, Blog, Category, Tag, Comment } = require('../models')
 
 const { Op } = Sequelize
 
@@ -173,4 +173,4 @@ class BlogController {
   }
 }
 
-export default new BlogController()
+module.exports = new BlogController()

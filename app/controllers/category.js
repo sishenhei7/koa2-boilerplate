@@ -1,4 +1,4 @@
-import { Category } from '../models'
+const { Category } = require('../models')
 
 class CategoryController {
   async getCategory(ctx) {
@@ -25,4 +25,4 @@ class CategoryController {
   }
 }
 
-export default new CategoryController()
+module.exports = new CategoryController()

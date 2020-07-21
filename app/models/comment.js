@@ -1,5 +1,5 @@
-import Sequelize from 'sequelize'
-import sequelize from '../db'
+const Sequelize = require('sequelize')
+const sequelize = require('../db')
 
 const { Model } = Sequelize
 
@@ -34,4 +34,4 @@ Comment.init(
   }
 )
 
-export default Comment
+module.exports = Comment

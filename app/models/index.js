@@ -1,8 +1,8 @@
-import User from './user'
-import Blog from './blog'
-import Category from './category'
-import Tag from './tag'
-import Comment from './comment'
+const User = require('./user')
+const Blog = require('./blog')
+const Category = require('./category')
+const Tag = require('./tag')
+const Comment = require('./comment')
 
 // A belongsTo B 会在 A 的实例下自动生成下列方法
 // getXxx、setXxx、createXxx
@@ -45,4 +45,10 @@ Comment.belongsTo(Blog)
 User.hasMany(Comment)
 Comment.belongsTo(User)
 
-export { User, Blog, Category, Tag, Comment }
+module.exports = {
+  User,
+  Blog,
+  Category,
+  Tag,
+  Comment,
+}

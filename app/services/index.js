@@ -1,6 +1,6 @@
-export * as auth from './auth'
-export * as user from './user'
-export * as blog from './blog'
-export * as category from './category'
-export * as tag from './tag'
-export * as comment from './comment'
+exports.auth = require('./auth')
+exports.user = require('./user')
+exports.blog = require('./blog')
+exports.category = require('./category')
+exports.tag = require('./tag')
+exports.comment = require('./comment')
